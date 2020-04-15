@@ -79,6 +79,7 @@ navbar:
   right:
   - icon: "fa-github"
     href: https://github.com/emilygsimmonds/QuantBio/tree/gh-pages
+output_dir: "."
 output:
   html_document:
     theme: cosmo
