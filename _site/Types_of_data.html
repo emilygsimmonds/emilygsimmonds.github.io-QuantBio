@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Types of data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">HOME</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    The basics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Introductions</li>
+    <li class="divider"></li>
+    <li>
+      <a href="What_is_statistics.html">What is statistics?</a>
+    </li>
+    <li>
+      <a href="Quantitative_methods_in_biology.html">Quantitative methods in biology</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">All about data</li>
+    <li class="divider"></li>
+    <li>
+      <a href="Types_of_data.html">Types of data</a>
+    </li>
+    <li>
+      <a href="Data_visualisation.html">Data visualisation</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Describing data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">General statistical theory</li>
+    <li class="divider"></li>
+    <li>
+      <a href="Describing_data.html">Probability</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Random variables</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Hypothesis testing</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Statistical modelling</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Parameter estimation</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Uncertainty</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Introductions</li>
+    <li class="divider"></li>
+    <li>
+      <a href="R_tutorial.html">General intro</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Errors and warnings</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Finding help</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="R_tutorial.html">Plotting</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Data management</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Advanced</li>
+    <li class="divider"></li>
+    <li>
+      <a href="R_tutorial.html">for loops</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Writing functions</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Tips and tricks</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">For frequencies and probailities</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">For categorical explanatory variables</li>
+    <li class="divider"></li>
+    <li>
+      <a href="Example_analysis.html">Example</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">For numeric explanatory variables</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">For mixed explanatory variables</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">For non-normal error</li>
+    <li class="divider"></li>
+  </ul>
+</li>
+<li>
+  <a href="Index.html">Glossary</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/emilygsimmonds/QuantBio/tree/gh-pages">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Types of data</h1>
+
+</div>
+
+
+<p><i class="fas fa-table fa-5x"></i></p>
+<p></br></p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>A datum is a piece of information, typically collected in the form of a numerical measurement or characteristic. Multiple of these are called data.</p>
+<p>This is a very broad definition and can cover nearly anything you can collect. In science, especially the field of biology, we collect a lot of data.</p>
+<p>Different biological studies collect data in different ways. Measuring the growth of bacteria in a lab is not the same as counting moose in a forest, and measuring rainfall through the year is not the same as recording the colour of parrots. These differences in data collection lead to differences in the way the data should be analysed and interpreted.</p>
+<p></br></p>
+<p><img src="Rainfall%20and%20parrots.png" /> <em>Figure 1: Example of biological studies; rainfall collection and colour variation in parrots, credit: Emily G. Simmonds</em></p>
+<p></br> </br> </br></p>
+</div>
+<div id="variables" class="section level1">
+<h1>Variables</h1>
+<p>Variables are characteristics or measurements that differ between individuals in the population, some examples are wing span, eye colour, and seed size. In almost all instances, it is only possible to measure a subset of a population. The subset is our sample and we measure individuals in this sample. For example, measuring wing length in all cabbage butterflies (Pieris rapae, Figure 3) that have ever existed would be impossible but you could measure all butterflies caught on a farm over several years (for more information on populations and samples go to: Introduction to statistics - link not live yet sorry!).</p>
+<p></br></p>
+<p><img src="Butterfly_wing_measure.png" /> <em>Figure 2: Cabbage butterflies with wing measurements (schematic). Credit: Emily G. Simmonds</em></p>
+<p></br></p>
+<p>Variables show variation in the population and are defined at the population level, even if they are only measured for a sample. Estimated quantities, such as averages (see Descriptive statistics) can also be variables, even though they are not measured directly, as long as they show variation between individuals in the defined population.</p>
+<p>Data we use in biology are measurements of variables. A dataset is a collection of multiple variables.</p>
+<p>Variable can be categorised into two key groups; response and explanatory variables. The distinction between these variables types is important for analysis but is not always straightforward.</p>
+<p></br> </br></p>
+<div id="response-variable-y" class="section level2">
+<h2>Response variable <span class="math inline">\((Y)\)</span></h2>
+<p>A response is an assumed consequence and the result we seek to make conclusions about. The response variable is the variable we assume to be a consequence of the processes we are studying for example we could assume that plant growth is a response to light it receives, the other way around does not make sense. (Of course in some cases a larger plant might prevent its own leaves receiving light, but it will not affect how much the sun produces). The response variable is often the focus of a biological question in a study or experiment, it is what we want to explain. In most mathematical definitions, it is represented by the letter Y and it can also be known as the dependent variable.</p>
+<p><img src="response_variable_schematic.png" /> <em>Figure 3: Illustration of a response variable. Credit: Emily G. Simmonds</em></p>
+<p></br> </br></p>
+</div>
+<div id="explanatory-variable-x" class="section level2">
+<h2>Explanatory variable <span class="math inline">\((X)\)</span></h2>
+<p>This is a variable that is used to explain the variation in the response variable. We assume that this variable has an effect on the response, but we cannot prove causality. The explanatory variable would be light in the plant-light example in Figure 4. In most mathematical definitions, it is represented as X. They are also referred to as independent variables or covariates.</p>
+<p><strong>Example</strong>: Consider a study of the species richness in Trondheim. The researcher wants to know:</p>
+<p><strong>Does local weather influence the number of species found in Trondheim?</strong></p>
+<p>To do this the researcher collects data on weather. They count the number of species and collect rainfall at several locations in Trondheim.</p>
+<p>In this scenario:</p>
+<p>The response variable is species richness</p>
+<p>The explanatory variable are rainfall (mm)</p>
+<p><img src="Species_richness_rain_graph.png" /> <em>Figure 4: First panel: Scatterplot showing the relationship between response variables (Y) and Explanatory variables (X), simulated data, credit: Kwaku Peprah Adjei. Second panel: illustration of the relationship, credit: Emily G. Simmonds</em> </br> </br> </br></p>
+</div>
+</div>
+<div id="types-of-data" class="section level1">
+<h1>Types of data</h1>
+<p>There are many ways to categorise data types. Here, we start with a division into qualitative (denoted categorical) and quantitative (denoted numerical). Each data type has its own characteristics which determine how it should be treated statistically and how statistical results should be interpreted. Characteristics of data are defined by the population we are trying to study, not the sample we have taken.</p>
+<p></br> </br></p>
+<div id="categorical-data" class="section level2">
+<h2>Categorical data</h2>
+<p>In this data type, individuals in the population can be placed in categories (groups) that do not have magnitude on a numerical scale. Categorical data can also be called attributes, factors, or qualitative variables. There are two forms of categorical data, ordinal and nominal data.</p>
+<p></br> <strong>Nominal data</strong> have groups that do not have any order. The order of the groups does not change their meaning.</p>
+<p>Examples of nominal data: gender (male and female), colour of cars</p>
+<p><img src="car_colours.png" /> <em>Figure 5: Illustration of car colours, credit: Emily G. Simmonds</em></p>
+<p></br> <strong>Ordinal data</strong> have groups that do have any order. In this case, the order of the groups has meaning.</p>
+<p>Examples of ordinal data: Spice scale (mild, medium, hot) …. it can be dangerous to get these mixed up!</p>
+<p><img src="chili_scale.png" /> <em>Figure 6: Illustration of chilli heat scale. Credit: Emily G. Simmonds</em></p>
+<p></br></p>
+<p><strong>Binary data</strong> are a special case of categorical data where there are only two groups representing success (1) and failure (0).</p>
+<p>Example of binary data: survival, where surviving = 1 and dying = 0</p>
+<p></br> </br></p>
+</div>
+<div id="numerical-data" class="section level2">
+<h2>Numerical data</h2>
+<p>These data are quantitative measurements of individuals that do have a numerical magnitude. There is a difference between quantities which are counted and those that are measured. Numerical data can be further split into discrete and continuous data.</p>
+<p><strong>Discrete numerical data</strong> are finite or countable and take a number of levels. They can only take certain values, they are non-negative integers (whole numbers). Some values are physically impossible for discrete data, such as 1.5 elephants or -2 elephants.</p>
+<p>Example of discrete data: The number of birds in a tree in Gløshaugen. The number of birds must always be a non-negative integer, you cannot have 0.25 birds or a negative number of birds</p>
+<p><img src="bird_count.png" /> <em>Figure 7: Illustration of count data. Credit: Emily G. Simmonds</em></p>
+<p></br></p>
+<p><strong>Continuous numerical data</strong> can take an infinite number of possible values within certain ranges.</p>
+<p>Examples of continuous numerical data: Temperature, rainfall, lengths, distances and many more.</p>
+<p><img src="temperature.png" /> <em>Figure 8: Map of average sea surface temperatures (AvSST) around Australia. Source: part of Figure 5 in Foster et al. 2014, PLoS ONE (<a href="https://doi.org/10.1371/journal.pone.0100762" class="uri">https://doi.org/10.1371/journal.pone.0100762</a>).</em></p>
+<p></br></p>
+<p>Continuous numerical data has one further consideration, which is the scale of the data. There are two primary scales of numerical data, these are interval scale and ratio scale data. The scale of data can be important to consider when interpreting results from statistical analyses.</p>
+<p><strong>Interval scale data</strong> are continuous data without an absolute zero. They can have an arbitrary zero (e.g. Temperature in ºC), but it does not have an absolute meaning. Each unit in interval data has equal magnitude, and the units occur in an order. For instance, the difference from 1ºC to 2ºC is the same as the difference from 101ºC to 102ºC but not the same as 2ºC to 1ºC.</p>
+<p>Examples of interval scale data: the pH of soil, degrees celsius (ºC), degrees Fahrenheit (ºF)</p>
+<p><strong>Ratio scale data</strong> do have an absolute zero. In this case zero means something, for instance durations, which cannot be negative. Each unit still has equal magnitude and occur in order.</p>
+<p>Examples of ratio scale data: heart rate, distances (space), durations (time), degrees kelvin (ºK)</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

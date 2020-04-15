@@ -1,0 +1,30 @@
+---
+title: "Data visualisation"
+output: 
+ html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+---
+
+<i class="fas fa-chart-area fa-5x"></i>
+
+</br>
+
+# Introduction
+
+</br>
+
+
+</br>
+</br>
+</br>
+
+# Graphs
+
+## Graphs for numeric data
+
+## Grapgs for categorical data
+
+# Tables
+

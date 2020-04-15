@@ -1,0 +1,47 @@
+---
+title: "Example analysis"
+output: 
+ html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+---
+
+# Introduction {- .tabset}
+
+</br>
+
+## Theory
+
+</br>
+
+### <i class="far fa-question-circle"></i> Questions that can be answered with this model
+
+</br>
+
+### <i class="fas fa-table"></i> Type of data that should be used
+
+</br>
+
+### <i class="fas fa-project-diagram"></i> Details of the model 
+
+</br>
+
+### <i class="fas fa-laptop"></i> Parameters
+
+</br>
+
+### <i class="fas fa-arrows-alt-h"></i> How to quantify uncertainty
+
+</br>
+
+### <i class="fas fa-tasks"></i> How to check the model
+
+</br>
+
+### <i class="far fa-lightbulb"></i> How to draw conclusions
+
+</br>
+
+## Worked example 
+

@@ -1,0 +1,84 @@
+name: "R Markdown Website Layout"
+navbar:
+  inverse: true
+  title: "HOME"
+  left:
+    - text: "The basics"
+      menu: 
+        - text: "Introductions"
+        - text: "---"
+        - text: "What is statistics?"
+          href: What_is_statistics.html
+        - text: "Quantitative methods in biology"
+          href: Quantitative_methods_in_biology.html
+        - text: "---"
+        - text: "All about data"
+        - text: "---"
+        - text: "Types of data"
+          href: Types_of_data.html
+        - text: "Data visualisation"
+          href: Data_visualisation.html
+        - text: "Describing data"
+          href: Describing_data.html
+        - text: "---"
+        - text: "General statistical theory"
+        - text: "---"
+        - text: "Probability"
+          href: Describing_data.html
+        - text: "Random variables"
+          href: Describing_data.html
+        - text: "Hypothesis testing"
+          href: Describing_data.html
+        - text: "Statistical modelling"
+          href: Describing_data.html
+        - text: "Parameter estimation"
+          href: Describing_data.html
+        - text: "Uncertainty"
+          href: Describing_data.html
+    - text: R
+      menu: 
+       - text: "Introductions"
+       - text: "-----"
+       - text: "General intro"
+         href: R_tutorial.html
+       - text: "Errors and warnings"
+         href: R_tutorial.html
+       - text: "Finding help"
+         href: R_tutorial.html
+       - text: "----"
+       - text: "Plotting"
+         href: R_tutorial.html
+       - text: "Data management"
+         href: R_tutorial.html
+       - text: "----"
+       - text: "Advanced"
+       - text: "-----"
+       - text: "for loops"
+         href: R_tutorial.html
+       - text: "Writing functions"
+         href: R_tutorial.html
+       - text: "Tips and tricks"
+         href: R_tutorial.html
+    - text: "Analyses"
+      menu:
+        - text: "For frequencies and probailities"
+        - text: "-----"
+        - text: "For categorical explanatory variables"
+        - text: "-----"
+        - text: "Example"
+          href: Example_analysis.html
+        - text: "-----"
+        - text: "For numeric explanatory variables"
+        - text: "-----"
+        - text: "For mixed explanatory variables"
+        - text: "-----"
+        - text: "For non-normal error"
+        - text: "-----"
+    - text: "Glossary"
+      href: Index.html
+  right:
+  - icon: "fa-github"
+    href: https://github.com/emilygsimmonds/QuantBio/tree/gh-pages
+output:
+  html_document:
+    theme: cosmo

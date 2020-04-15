@@ -1,0 +1,36 @@
+---
+title: "What is statistics?"
+output: 
+ html_document:
+    df_print: paged
+    toc: true
+    toc_float: true
+---
+
+# Introduction {.tabset}
+
+Statistics begins from a desire to measure the properties of an individual in the population and say something about those measurements. We might want to measure the average number of calls received in a week, the highest amount of rainfall recorded in a week, etc.
+
+One wants to make statements about the properties they measured, that can be generalised and compared. Statistics give us a standardised way to collect, describe, analyse, and present data.
+
+Statistics also gives us a way to quantify the uncertainty in our estimates. Uncertainty of our estimates describes how sure we are of our estimates. When we want to make conclusions about a population from a sample, we are bound to make some errors. Because we are using incomplete data, the uncertainties in our estimates need to be accounted for. Through hypothesis testing, statistics give us the opportunity to obtain such estimates at a given level of confidence. Therefore, we need to state how sure we are of our estimates by taking the error into account.
+
+</br>
+
+## Theory
+
+### Samples and populations
+
+#### Inference
+
+### Estimation
+
+### Parameters and statistics
+
+### Motivations
+
+## Examples 
+
+### Darwin's finches
+
+### Dendrochronology
