@@ -75,7 +75,7 @@ navbar:
         - text: "For non-normal error"
         - text: "-----"
     - text: "Glossary"
-      href: Index.html
+      href: index.html
   right:
   - icon: "fa-github"
     href: https://github.com/emilygsimmonds/QuantBio/tree/gh-pages
