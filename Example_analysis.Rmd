@@ -1,5 +1,5 @@
 ---
-title: "Example analysis"
+title: "Simple linear regression"
 output: 
  html_document:
     df_print: paged
@@ -7,41 +7,260 @@ output:
     toc_float: true
 ---
 
-# Introduction {- .tabset}
+</br>
+</br>
+
+# Introduction 
+
+In this section, we will look at how we can use simple linear regression to analyse data with a continuous numeric response and a numeric explanatory variable. Linear regression is a type of linear model, you might want to visit the general page on linear models before reading the rest of this information [click here]().
+
+</br>
+
+Linear regression has two motivations. The first is called **inference**. This is when you want to say something about a population from a sample. The second is **prediction**, where we use models to predict values of the response for specified values of the explanatory variable. These predictions can either be for observed values of the explanatory (mainly for plotting), for unobserved values of the explanatory variable within the same range as observations, or for novel values of the explanatory variable outside the range of observations (this is more risky! - more on this later). 
+
+</br>
+ 
+**Example inference: do zombies run faster than humans?**
+ 
+**Example prediction: how much faster will I be if I turn into a zombie?**
+
+</br>
+
+![](Zombies.png)
+
+*Figure 1: Human and Zombie © Emily G. Simmonds cc-by*
+ 
+</br>
+ 
+In simple terms, we fit a straight line to:
+
+1) estimate a relationship between $X$ and $Y$
+
+2) predict change in $Y$ from change in $X$. 
+ 
+Linear regression assumes a causal relationship between $X$ and $Y$, i.e. it assumes that $X$ does  something to $Y$. However, we can never actually test this with this method, we can only quantify the patterns. To test if $X$ really does have a causal affect on $Y$, you would need experiments. Otherwise, you never know if the relationship is a coincidence e.g. https://www.tylervigen.com/spurious-correlations
+
+</br>
+
+# <i class="far fa-question-circle"></i> Which questions? 
+ 
+Example questions you can answer with linear regression:
+ 
+ * How does temperature change with time?
+ * How does the amount of crime change with temperature?
+ * How does relative plant biomass change with light intensity?
+ * What will the temperature be in 2100?
+ * How tall will someone be if they have hair 30cm long?
+ 
+</br>
+
+# <i class="fas fa-table"></i> Type of data that should be used {- .tabset}
 
 </br>
 
 ## Theory
 
-</br>
+As stated earlier on this page, you choose to use a linear regression when you have continuous numeric a response variable and continuous numeric explanatory variables. A **simple linear regression** has only one explanatory variable, a **multiple linear regression** has more than one. There is no upper limit in theory, but if you add too many, your model will less complex than reality.
 
-### <i class="far fa-question-circle"></i> Questions that can be answered with this model
+**Examples of continuous numeric variables**:
 
-</br>
-
-### <i class="fas fa-table"></i> Type of data that should be used
-
-</br>
-
-### <i class="fas fa-project-diagram"></i> Details of the model 
+* Temperature
+* Rainfall
+* Distance
+* Height
+* Weight
 
 </br>
 
-### <i class="fas fa-laptop"></i> Parameters
+If you are ever unsure if your variables are continuous numeric or not, ask yourself: *could all values between those measured exist?*
+
+In the example below, height in metres could take any value between 0 and 100. This means we could predict the weight ($Y$) in kg for a dragon that is 1.22m tall, 20.33333m tall, or any other value. 
+
+```{r, include = T, echo = F}
+# create the data
+set.seed(2020)
+DragonData <- data.frame(Y = rnorm(100, seq(20, 100, length.out=100), 10), X = rnorm(100, seq(20, 100, length.out=100), 10))
+
+# plot it
+plot(DragonData$X, DragonData$Y, pch=16, col=4,
+     xlab = "Height (m)", ylab = "Weight (kg)", 
+     main = "Dragon size")
+
+# load the picture and add
+library(png)
+dragon <- readPNG("Dragons.png")
+rasterImage(dragon,80,0,105,25)
+```
+
+
+## Worked example 
+
+There are several ways to check the type of data that your variables are in R. 
+
+To look at this, we will begin with some data. The data are still on dragons, but now we have an extra variable, colour (purple or red). 
+
+```{r, include = F, echo = F}
+# add the colour column
+set.seed(2020)
+DragonData$colour <- as.factor(sample(c("red", "purple"), 100, replace=T))
+colnames(DragonData) <- c("Weight", "Height", "Colour")
+```
+
+We can look at the first six lines of the data using the function `head()`.
+
+```{r, include = T, echo =T}
+head(DragonData)
+```
 
 </br>
 
-### <i class="fas fa-arrows-alt-h"></i> How to quantify uncertainty
+This is nice, we can see what the columns are called and what the data looks like. From this, we can use our knowledge of theory to work out if the variables are numeric or categorical. But, we would not know how R sees the data. To do this, we want to use the function `str()`. This stands for 'structure' and it will tell you the structure of each column in the dataframe. 
+
+```{r, include = T, echo =T}
+str(DragonData)
+```
+
+Now, we can see that Weight and Height are something called 'num' this = numeric. Colour on the other hand is a factor. Factor is another word for a categorical variable. 
 
 </br>
 
-### <i class="fas fa-tasks"></i> How to check the model
+Using `str()` we can check how R is treating our variables. This should not replace the theory because sometimes R gets it wrong. In this case, you can change the way that variables are stored using functions like `as.numeric()` and `as.factor()` e.g.
+
+
+```{r, include = T, echo =T}
+as.numeric(DragonData$Colour)
+```
+</br>
+
+# <i class="fas fa-project-diagram"></i> Details of the model {- .tabset}
 
 </br>
 
-### <i class="far fa-lightbulb"></i> How to draw conclusions
+## Theory
+
+When we create a model we want to represent mathematically how the data were generated. 
+
+When we use a regression model (this is also true for linear models) make an assumption that there is a linear relationship between our two variables. Mathematically, we say that we can capture the data generation process with a straight line and some error.
+ 
+The line is defined by two parameters: <span style="color:orange">**$\alpha$**</span> = the intercept, where the line crosses the y-axis and <span style="color:blue">**$\beta$**</span> the slope of the line (steepness/gradient), it is how much $Y$ changes for every increase in 1 unit of $X$. We can alter the position of the line using these two parameters. The final part of the model is <span style="color:red">**$\epsilon$**</span>, which is the error around the line, we estimate this using a parameter **$\sigma^{2}$** that is the variance of the error. 
+ 
+We can write these model components as and equation in terms of $Y$:
+
+$$
+Y_i = \color{orange}\alpha + \color{blue}\beta X_i + \color{red}\epsilon_i
+$$
+
+### Assumptions
 
 </br>
 
 ## Worked example 
+
+</br>
+
+This worked example demonstrates how to fit a linear regression model in R using the `lm()` function. 
+
+`lm()` stands for linear model (should seem familiar). It takes the argument of a formula in form:
+`y~x`. The function will fit the regression model using maximum likelihood estimation and give us
+the maximum likelihood estimates of $\alpha$ and $\beta$ as an output. It does also estimate $\sigma^{2}$ of the error, but it does not report this.
+
+We will do this using the dragon data from earlier on the page. We will use Weight as our response ($Y$) and Height as our explanatory variable ($X$). 
+
+```{r, include = T, echo =T}
+model1 <- lm(DragonData$Weight ~ DragonData$Height)
+```
+
+</br>
+
+Great. We have run a model. This first time we chose the appropriate columns using the `$` symbol after the dataframe name. But there is another way to write the code for `lm()` and this second way is **important to use for predicting later.**
+
+The second way uses an extra argument call `data`
+
+```{r, include = T, echo =T}
+model2 <- lm(Weight ~ Height, data = DragonData)
+```
+
+If we look at the results of these models using the function `coef()`, we can see they are the same.
+
+```{r, include = T, echo =T}
+coef(model1)
+coef(model2)
+```
+
+# <i class="fas fa-laptop"></i> Parameters {- .tabset}
+
+</br>
+
+## Theory
+
+Here it would give more examples on what the parameters mean.
+
+Residuals introduced here.
+
+</br>
+
+## Worked example 
+
+This would show where to find the parameters e.g. more on coef and summary etc and resid. 
+
+</br>
+
+
+# <i class="fas fa-arrows-alt-h"></i> How to quantify uncertainty {- .tabset}
+
+</br>
+
+## Theory
+
+This would focus on theory of uncertainty in parameter estimates and prediction. 
+
+Explain how to calculate and why.
+
+</br>
+
+## Worked example 
+
+Focus on doing this in R, e.g. confint() or summary() then 2*SE
+
+</br>
+
+
+# <i class="fas fa-tasks"></i> How to check the model {- .tabset}
+
+</br>
+
+## Theory
+
+Explain why you need to check assumptions, what things to check for and what problems they could have.
+
+Also how to fix them. 
+
+</br>
+
+## Worked example 
+
+How to create diagnostic plots in R and some interpretation and fixing examples e.g. log() and sqrt().
+
+</br>
+
+
+# <i class="far fa-lightbulb"></i> How to draw conclusions {- .tabset}
+
+## Theory
+
+What each parameter can mean for a result and how to word statistical conclusions. 
+
+</br>
+
+## Worked example 
+
+How to read outputs from R and plot results.
+
+</br>
+
+# <i class="far fa-lightbulb"></i> Other relevant pages
+
+Links to general linear models page, ANOVA, Categorical, Multiple regression etc. 
+
+
 

@@ -534,10 +534,9 @@ div.tocify {
 <p><span style="color:blue"> Press enter after each line. </span></p>
 <p><span style="color:blue"> What happened? </span></p>
 <pre class="r"><code>getwd()
-2+2
-x&lt;-2+2
-2+
-  2</code></pre>
+2 + 2
+x &lt;- 2 + 2
+2 + 2</code></pre>
 <p>You might have noticed that the line with <code>2+</code> caused R to begin the next line with a <code>+</code> instead of <code>&gt;</code> <strong>This is important.</strong> When R is ready for a new line of code, it begins with a &gt;. If R is still working on a line, for example if the line is incomplete like <code>2+</code>, then it begins with a <code>+</code>. It will not complete until the line is finished e.g. by typing <code>2</code> to complete the sum.</p>
 <p><span style="color:blue"> Now type the same lines of code into the script window. </span></p>
 <p><span style="color:blue"> Try running from there. </span></p>
@@ -555,21 +554,21 @@ x&lt;-2+2
 <h1>Part B: Trying out R-commands</h1>
 <p>To execute your commands, you can either type directly in the console or run the commands from the source window. But here we want you to use a script.</p>
 <p><span style="color:blue"> Type and execute (run) the following commands. Add a comment after each one to remind yourself what it does. </span></p>
-<pre class="r"><code>2+3
-2*6
+<pre class="r"><code>2 + 3
+2 * 6
 5^2
-10^2-1
-10^(2-1)
+10^2 - 1
+10^(2 - 1)
 sqrt(9)
-?log
+`?`(log)
 log(3)
 exp(34)
 1:4
-c(1,2,3,4)
+c(1, 2, 3, 4)
 seq(from = 1, to = 4, by = 1)
 mean(1:5)
-heights = c(192,185,174,195,173)
-shoes = c(46,43,40,45,40)
+heights = c(192, 185, 174, 195, 173)
+shoes = c(46, 43, 40, 45, 40)
 ratio &lt;- heights/shoes
 ratio</code></pre>
 <p>Here we have created three <strong>objects</strong>: <code>heights</code>, <code>shoes</code> and <code>ratio</code>. <strong>Note</strong>: we can both use <code>=</code> and <code>&lt;-</code> for <strong>assigning</strong> content to an <strong>object</strong>.</p>
@@ -594,18 +593,20 @@ ratio</code></pre>
 <p>We will begin with using functions that already exist in R.</p>
 <p><span style="color:blue"> Run the lines of code below. Add some more comments to tell yourself what each does. </span></p>
 <p><span style="color:blue"> <strong>Bonus</strong> Read the error for line 3 and work out why it appears. </span></p>
-<pre class="r"><code>sd #lists the function code
-?sd #help pages for the function
-sd() #gives error
-sd(c(1,2,3,4,5,6,7,8,9,10)) #calculate the standard deviation of numbers 1 to 10
+<pre class="r"><code>sd  #lists the function code
+`?`(sd  #help pages for the function
+)
+sd()  #gives error
+sd(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))  #calculate the standard deviation of numbers 1 to 10
 # This last line actually uses two functions, sd() and c()</code></pre>
 <p>When using functions, there are two ways we can input the arguments. The first is to write them <strong>in order</strong> separated by commas. The second is to <strong>name them</strong>. There are examples of each below. If writing in order, you will need to look at the Help file to remember the correct order for each function.</p>
 <p>The example uses the <code>round()</code> function, this rounds a specified number to a certain number of digits.</p>
 <p><span style="color:blue"> We want to round 33333.33333 (object <code>a</code>) to 2 decimal places. Which lines below give the correct answer? </span></p>
 <p><span style="color:blue"> Why do some of them give the wrong answer? </span></p>
-<pre class="r"><code>?round #help pages for the function
-a &lt;- 33333.33333 # create object a
-b &lt;- 2 # create object b
+<pre class="r"><code>`?`(round  #help pages for the function
+)
+a &lt;- 33333.33333  # create object a
+b &lt;- 2  # create object b
 round(a, b)
 round(x = a, digits = b)
 
@@ -617,10 +618,11 @@ round(digits = b, x = a)</code></pre>
 <h1>Part D: Plotting</h1>
 <p>Creating plots is very important for presenting results, it can also be fun to make a pretty visual output. We can plot our data in R.</p>
 <p><span style="color:blue"> Create a basic plot using the code below. </span></p>
-<pre class="r"><code>x &lt;- seq(-4,4,length=500) # create an object called x
-y &lt;- x^2 - 1 # create an object called y
-?plot # look at the plot function in Help
-plot(x, y, type=&quot;p&quot;, main=&quot;My plot&quot;, xlab = &quot;x&quot;, ylab = &quot;y&quot;) # Plot the data</code></pre>
+<pre class="r"><code>x &lt;- seq(-4, 4, length = 500)  # create an object called x
+y &lt;- x^2 - 1  # create an object called y
+`?`(plot  # look at the plot function in Help
+)
+plot(x, y, type = &quot;p&quot;, main = &quot;My plot&quot;, xlab = &quot;x&quot;, ylab = &quot;y&quot;)  # Plot the data</code></pre>
 <p><span style="color:blue"> What do the arguments <code>type</code>, <code>main</code>, <code>xlab</code>, and <code>ylab</code> do?. </span></p>
 <p>To draw the plot in the way you want, check the help pages of the plot function to see which input values you can change to make your plot look the way you want to.</p>
 <p><span style="color:blue"> Try and change the colour and shape of the points. </span></p>
@@ -679,16 +681,15 @@ plot(x, y, type=&quot;p&quot;, main=&quot;My plot&quot;, xlab = &quot;x&quot;, y
 <p>When starting a function, you should start with the name of the function and state if the function takes input values, give these arguments name e.g. <code>x</code> and <code>y</code>.</p>
 <p>Then you write the code you want the function to perform inside the branches <span class="math inline">\({}\)</span>. <strong>You must indicate what you want your function to output using the <code>return()</code> function</strong>.</p>
 <p><span style="color:blue"> Have a look at the example function below. Can you work out what it does? </span></p>
-<pre class="r"><code>myfunction &lt;- function(x,y) 
-  # myfunction is the name, x and y are the names of the inputs (arugments)
-{ # function begins here
-  p &lt;- x*y
-  return(p) # we want to output p
-} # function ends here</code></pre>
+<pre class="r"><code>myfunction &lt;- function(x, y) # myfunction is the name, x and y are the names of the inputs (arugments) function begins here
+{
+    p &lt;- x * y
+    return(p)  # we want to output p
+}  # function ends here</code></pre>
 <p>To start using the function, you must first run it through the console so that it is in your enviroment (mark and run). Then you call the function name and give your inputs like this.</p>
 <pre class="r"><code>a &lt;- 7
 b &lt;- 333
-p &lt;- myfunction(x = a, y = b) # assign output to a variable p
+p &lt;- myfunction(x = a, y = b)  # assign output to a variable p
 p</code></pre>
 <p><strong>Congratulations! You have written your first R function.</strong></p>
 <p><span style="color:blue"> Now see if you can write another, this time to add 5 to any value. </span></p>
@@ -700,11 +701,11 @@ p</code></pre>
 <p><strong>To install</strong> an R package from CRAN you go to the Packages tab in the bottom right RStudio window and see if the packages is already available on your computer (there will be a list). If you do not see the package in this list you will need to download and install it. Do this by either pressing Install on the top left corner of the Packages window, CRAN is already filled as “Install from” and then write your package name to install, and usefully you can check a box to “install dependencies” <strong>This is important to do</strong>. Then press “Install”.</p>
 <p>Alternatively, in the script window you may write and run:</p>
 <pre class="r"><code>install.packages(&quot;PACKAGE_NAME&quot;, dependencies = TRUE)
-library(ISLR) # to make the package available in the current session</code></pre>
+library(ISLR)  # to make the package available in the current session</code></pre>
 <p><span style="color:blue"> Using one of the methods above, install the package called “praise”. </span></p>
 <p><strong>Remember:</strong> PACKAGE_NAME must always be changed to the actual package you want!</p>
 <p><strong>To load</strong>: Now the package is installed, you need to load it into our current session. Remember that whenever starting a new session, you need to reload the packages you want to use. This can be done in two ways. Either, find the package in your list of packages, in the Packages window, and check the box next to it. OR using the <code>library()</code> function. <strong>Note:</strong> the library function does not have &quot;&quot; around the package name.</p>
-<pre class="r"><code>library(PACKAGE_NAME) # to make the package available in the current session</code></pre>
+<pre class="r"><code>library(PACKAGE_NAME)  # to make the package available in the current session</code></pre>
 <p><span style="color:blue"> Using one of the methods above, load the package called “praise” into your session. Then run the below. </span></p>
 <pre class="r"><code>praise(&quot;${EXCLAMATION}! You have done this ${adverb}!&quot;)</code></pre>
 </div>
@@ -718,8 +719,8 @@ library(ISLR) # to make the package available in the current session</code></pre
 <p><span style="color:blue"> <strong>Make sure you download and save as a <code>.csv</code> file.</strong> </span></p>
 <p><span style="color:blue"> <strong>DO NOT open in excel or save as <code>.xls</code> or <code>.txt</code></strong> </span></p>
 <p><span style="color:blue"> Now look at the R script below, what does each line of the script do? </span></p>
-<pre class="r"><code>?read.csv
-datafile &lt;- read.csv(file=&quot;test_data.csv&quot;, header=TRUE)
+<pre class="r"><code>`?`(read.csv)
+datafile &lt;- read.csv(file = &quot;test_data.csv&quot;, header = TRUE)
 dim(datafile)
 head(datafile)
 tail(datafile)
@@ -740,7 +741,7 @@ datafile</code></pre>
 <p>The script contains a function called <code>test_function()</code> it takes the argument <code>x</code>, which should be a single number.</p>
 <p><span style="color:blue"> Run the code below to source the script and run <code>test_function()</code> see if you can work out what the function does. </span></p>
 <pre class="r"><code>source(&quot;Test_script.R&quot;)
-test_function(x=5)</code></pre>
+test_function(x = 5)</code></pre>
 </div>
 </div>
 <div id="part-h-plotting-from-a-data-frame" class="section level1">
@@ -756,10 +757,10 @@ colnames(datafile)</code></pre>
 <p><span style="color:blue"> Try out the following lines of code. Why does the second line fail? </span></p>
 <pre class="r"><code>datafile$x
 datafile$Y
-plot(datafile$x, datafile$y, type=&quot;p&quot;, main=&quot;My plot&quot;, xlab = &quot;x&quot;, ylab = &quot;y&quot;) # Plot the data</code></pre>
+plot(datafile$x, datafile$y, type = &quot;p&quot;, main = &quot;My plot&quot;, xlab = &quot;x&quot;, ylab = &quot;y&quot;)  # Plot the data</code></pre>
 <p>For plotting there is actually another way you can plot columns within a data frame. <strong>You will need to be familiar with this technique for later classes!</strong> The second way is to use the argument <code>data</code>. With this argument you can specify where R should look for the column you put in the x and y position.</p>
 <p><span style="color:blue"> Run the line below. You should get the same plot as before, but you don’t! Can you work out why not? </span></p>
-<pre class="r"><code>plot(x, y, data = datafile, type=&quot;p&quot;, main=&quot;My plot&quot;, xlab = &quot;x&quot;, ylab = &quot;y&quot;) # Plot the data</code></pre>
+<pre class="r"><code>plot(x, y, data = datafile, type = &quot;p&quot;, main = &quot;My plot&quot;, xlab = &quot;x&quot;, ylab = &quot;y&quot;)  # Plot the data</code></pre>
 </div>
 
 

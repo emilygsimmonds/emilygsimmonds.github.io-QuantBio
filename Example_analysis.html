@@ -11,7 +11,7 @@
 
 
 
-<title>Example analysis</title>
+<title>Simple linear regression</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -483,49 +483,188 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Example analysis</h1>
+<h1 class="title toc-ignore">Simple linear regression</h1>
 
 </div>
 
 
-<div id="introduction" class="section level1 unnumbered tabset">
+<p></br> </br></p>
+<div id="introduction" class="section level1">
 <h1>Introduction</h1>
+<p>In this section, we will look at how we can use simple linear regression to analyse data with a continuous numeric response and a numeric explanatory variable. Linear regression is a type of linear model, you might want to visit the general page on linear models before reading the rest of this information <a href="">click here</a>.</p>
+<p></br></p>
+<p>Linear regression has two motivations. The first is called <strong>inference</strong>. This is when you want to say something about a population from a sample. The second is <strong>prediction</strong>, where we use models to predict values of the response for specified values of the explanatory variable. These predictions can either be for observed values of the explanatory (mainly for plotting), for unobserved values of the explanatory variable within the same range as observations, or for novel values of the explanatory variable outside the range of observations (this is more risky! - more on this later).</p>
+<p></br></p>
+<p><strong>Example inference: do zombies run faster than humans?</strong></p>
+<p><strong>Example prediction: how much faster will I be if I turn into a zombie?</strong></p>
+<p></br></p>
+<p><img src="Zombies.png" /></p>
+<p><em>Figure 1: Human and Zombie © Emily G. Simmonds cc-by</em></p>
+<p></br></p>
+<p>In simple terms, we fit a straight line to:</p>
+<ol style="list-style-type: decimal">
+<li><p>estimate a relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span></p></li>
+<li><p>predict change in <span class="math inline">\(Y\)</span> from change in <span class="math inline">\(X\)</span>.</p></li>
+</ol>
+<p>Linear regression assumes a causal relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, i.e. it assumes that <span class="math inline">\(X\)</span> does something to <span class="math inline">\(Y\)</span>. However, we can never actually test this with this method, we can only quantify the patterns. To test if <span class="math inline">\(X\)</span> really does have a causal affect on <span class="math inline">\(Y\)</span>, you would need experiments. Otherwise, you never know if the relationship is a coincidence e.g. <a href="https://www.tylervigen.com/spurious-correlations" class="uri">https://www.tylervigen.com/spurious-correlations</a></p>
+<p></br></p>
+</div>
+<div id="which-questions" class="section level1">
+<h1><i class="far fa-question-circle"></i> Which questions?</h1>
+<p>Example questions you can answer with linear regression:</p>
+<ul>
+<li>How does temperature change with time?</li>
+<li>How does the amount of crime change with temperature?</li>
+<li>How does relative plant biomass change with light intensity?</li>
+<li>What will the temperature be in 2100?</li>
+<li>How tall will someone be if they have hair 30cm long?</li>
+</ul>
+<p></br></p>
+</div>
+<div id="type-of-data-that-should-be-used" class="section level1 unnumbered tabset">
+<h1><i class="fas fa-table"></i> Type of data that should be used</h1>
 <p></br></p>
 <div id="theory" class="section level2">
 <h2>Theory</h2>
+<p>As stated earlier on this page, you choose to use a linear regression when you have continuous numeric a response variable and continuous numeric explanatory variables. A <strong>simple linear regression</strong> has only one explanatory variable, a <strong>multiple linear regression</strong> has more than one. There is no upper limit in theory, but if you add too many, your model will less complex than reality.</p>
+<p><strong>Examples of continuous numeric variables</strong>:</p>
+<ul>
+<li>Temperature</li>
+<li>Rainfall</li>
+<li>Distance</li>
+<li>Height</li>
+<li>Weight</li>
+</ul>
 <p></br></p>
-<div id="questions-that-can-be-answered-with-this-model" class="section level3">
-<h3><i class="far fa-question-circle"></i> Questions that can be answered with this model</h3>
-<p></br></p>
-</div>
-<div id="type-of-data-that-should-be-used" class="section level3">
-<h3><i class="fas fa-table"></i> Type of data that should be used</h3>
-<p></br></p>
-</div>
-<div id="details-of-the-model" class="section level3">
-<h3><i class="fas fa-project-diagram"></i> Details of the model</h3>
-<p></br></p>
-</div>
-<div id="parameters" class="section level3">
-<h3><i class="fas fa-laptop"></i> Parameters</h3>
-<p></br></p>
-</div>
-<div id="how-to-quantify-uncertainty" class="section level3">
-<h3><i class="fas fa-arrows-alt-h"></i> How to quantify uncertainty</h3>
-<p></br></p>
-</div>
-<div id="how-to-check-the-model" class="section level3">
-<h3><i class="fas fa-tasks"></i> How to check the model</h3>
-<p></br></p>
-</div>
-<div id="how-to-draw-conclusions" class="section level3">
-<h3><i class="far fa-lightbulb"></i> How to draw conclusions</h3>
-<p></br></p>
-</div>
+<p>If you are ever unsure if your variables are continuous numeric or not, ask yourself: <em>could all values between those measured exist?</em></p>
+<p>In the example below, height in metres could take any value between 0 and 100. This means we could predict the weight (<span class="math inline">\(Y\)</span>) in kg for a dragon that is 1.22m tall, 20.33333m tall, or any other value.</p>
+<p><img src="Example_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 </div>
 <div id="worked-example" class="section level2">
 <h2>Worked example</h2>
+<p>There are several ways to check the type of data that your variables are in R.</p>
+<p>To look at this, we will begin with some data. The data are still on dragons, but now we have an extra variable, colour (purple or red).</p>
+<p>We can look at the first six lines of the data using the function <code>head()</code>.</p>
+<pre class="r"><code>head(DragonData)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Weight"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Height"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Colour"],"name":[3],"type":["fctr"],"align":["left"]}],"data":[{"1":"23.76972","2":"2.712161","3":"purple","_rn_":"1"},{"1":"23.82356","2":"10.895471","3":"red","_rn_":"2"},{"1":"10.63593","2":"15.761106","3":"purple","_rn_":"3"},{"1":"11.12018","2":"26.259460","3":"red","_rn_":"4"},{"1":"-4.73302","2":"30.698972","3":"red","_rn_":"5"},{"1":"31.24614","2":"14.756195","3":"red","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
+<p></br></p>
+<p>This is nice, we can see what the columns are called and what the data looks like. From this, we can use our knowledge of theory to work out if the variables are numeric or categorical. But, we would not know how R sees the data. To do this, we want to use the function <code>str()</code>. This stands for ‘structure’ and it will tell you the structure of each column in the dataframe.</p>
+<pre class="r"><code>str(DragonData)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    100 obs. of  3 variables:
+##  $ Weight: num  23.77 23.82 10.64 11.12 -4.73 ...
+##  $ Height: num  2.71 10.9 15.76 26.26 30.7 ...
+##  $ Colour: Factor w/ 2 levels &quot;purple&quot;,&quot;red&quot;: 1 2 1 2 2 2 2 2 2 1 ...</code></pre>
+<p>Now, we can see that Weight and Height are something called ‘num’ this = numeric. Colour on the other hand is a factor. Factor is another word for a categorical variable.</p>
+<p></br></p>
+<p>Using <code>str()</code> we can check how R is treating our variables. This should not replace the theory because sometimes R gets it wrong. In this case, you can change the way that variables are stored using functions like <code>as.numeric()</code> and <code>as.factor()</code> e.g.</p>
+<pre class="r"><code>as.numeric(DragonData$Colour)</code></pre>
+<pre><code>##   [1] 1 2 1 2 2 2 2 2 2 1 1 1 1 2 2 1 1 1 1 2 2 2 1 1 1 2 2 1 2 1 1 2 1 1 2 2 2 1 1 2 1 2 1 1 1 1 2 1 1 2 1 2
+##  [53] 1 1 1 2 2 2 1 2 2 1 2 2 1 1 1 1 1 2 1 1 2 2 1 2 2 2 1 1 1 2 2 2 2 2 2 2 2 2 1 1 2 1 1 2 1 2 1 2</code></pre>
+<p></br></p>
+</div>
+</div>
+<div id="details-of-the-model" class="section level1 unnumbered tabset">
+<h1><i class="fas fa-project-diagram"></i> Details of the model</h1>
+<p></br></p>
+<div id="theory-1" class="section level2">
+<h2>Theory</h2>
+<p>When we create a model we want to represent mathematically how the data were generated.</p>
+<p>When we use a regression model (this is also true for linear models) make an assumption that there is a linear relationship between our two variables. Mathematically, we say that we can capture the data generation process with a straight line and some error.</p>
+<p>The line is defined by two parameters: <span style="color:orange"><strong><span class="math inline">\(\alpha\)</span></strong></span> = the intercept, where the line crosses the y-axis and <span style="color:blue"><strong><span class="math inline">\(\beta\)</span></strong></span> the slope of the line (steepness/gradient), it is how much <span class="math inline">\(Y\)</span> changes for every increase in 1 unit of <span class="math inline">\(X\)</span>. We can alter the position of the line using these two parameters. The final part of the model is <span style="color:red"><strong><span class="math inline">\(\epsilon\)</span></strong></span>, which is the error around the line, we estimate this using a parameter <strong><span class="math inline">\(\sigma^{2}\)</span></strong> that is the variance of the error.</p>
+<p>We can write these model components as and equation in terms of <span class="math inline">\(Y\)</span>:</p>
+<p><span class="math display">\[
+Y_i = \color{orange}\alpha + \color{blue}\beta X_i + \color{red}\epsilon_i
+\]</span></p>
+<div id="assumptions" class="section level3">
+<h3>Assumptions</h3>
+<p></br></p>
+</div>
+</div>
+<div id="worked-example-1" class="section level2">
+<h2>Worked example</h2>
+<p></br></p>
+<p>This worked example demonstrates how to fit a linear regression model in R using the <code>lm()</code> function.</p>
+<p><code>lm()</code> stands for linear model (should seem familiar). It takes the argument of a formula in form: <code>y~x</code>. The function will fit the regression model using maximum likelihood estimation and give us the maximum likelihood estimates of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> as an output. It does also estimate <span class="math inline">\(\sigma^{2}\)</span> of the error, but it does not report this.</p>
+<p>We will do this using the dragon data from earlier on the page. We will use Weight as our response (<span class="math inline">\(Y\)</span>) and Height as our explanatory variable (<span class="math inline">\(X\)</span>).</p>
+<pre class="r"><code>model1 &lt;- lm(DragonData$Weight ~ DragonData$Height)</code></pre>
+<p></br></p>
+<p>Great. We have run a model. This first time we chose the appropriate columns using the <code>$</code> symbol after the dataframe name. But there is another way to write the code for <code>lm()</code> and this second way is <strong>important to use for predicting later.</strong></p>
+<p>The second way uses an extra argument call <code>data</code></p>
+<pre class="r"><code>model2 &lt;- lm(Weight ~ Height, data = DragonData)</code></pre>
+<p>If we look at the results of these models using the function <code>coef()</code>, we can see they are the same.</p>
+<pre class="r"><code>coef(model1)</code></pre>
+<pre><code>##       (Intercept) DragonData$Height 
+##        14.2385703         0.7961855</code></pre>
+<pre class="r"><code>coef(model2)</code></pre>
+<pre><code>## (Intercept)      Height 
+##  14.2385703   0.7961855</code></pre>
+</div>
+</div>
+<div id="parameters" class="section level1 unnumbered tabset">
+<h1><i class="fas fa-laptop"></i> Parameters</h1>
+<p></br></p>
+<div id="theory-2" class="section level2">
+<h2>Theory</h2>
+<p>Here it would give more examples on what the parameters mean.</p>
+<p>Residuals introduced here.</p>
+<p></br></p>
+</div>
+<div id="worked-example-2" class="section level2">
+<h2>Worked example</h2>
+<p>This would show where to find the parameters e.g. more on coef and summary etc and resid.</p>
+<p></br></p>
+</div>
+</div>
+<div id="how-to-quantify-uncertainty" class="section level1 unnumbered tabset">
+<h1><i class="fas fa-arrows-alt-h"></i> How to quantify uncertainty</h1>
+<p></br></p>
+<div id="theory-3" class="section level2">
+<h2>Theory</h2>
+<p>This would focus on theory of uncertainty in parameter estimates and prediction.</p>
+<p>Explain how to calculate and why.</p>
+<p></br></p>
+</div>
+<div id="worked-example-3" class="section level2">
+<h2>Worked example</h2>
+<p>Focus on doing this in R, e.g. confint() or summary() then 2*SE</p>
+<p></br></p>
+</div>
+</div>
+<div id="how-to-check-the-model" class="section level1 unnumbered tabset">
+<h1><i class="fas fa-tasks"></i> How to check the model</h1>
+<p></br></p>
+<div id="theory-4" class="section level2">
+<h2>Theory</h2>
+<p>Explain why you need to check assumptions, what things to check for and what problems they could have.</p>
+<p>Also how to fix them.</p>
+<p></br></p>
+</div>
+<div id="worked-example-4" class="section level2">
+<h2>Worked example</h2>
+<p>How to create diagnostic plots in R and some interpretation and fixing examples e.g. log() and sqrt().</p>
+<p></br></p>
+</div>
+</div>
+<div id="how-to-draw-conclusions" class="section level1 unnumbered tabset">
+<h1><i class="far fa-lightbulb"></i> How to draw conclusions</h1>
+<div id="theory-5" class="section level2">
+<h2>Theory</h2>
+<p>What each parameter can mean for a result and how to word statistical conclusions.</p>
+<p></br></p>
+</div>
+<div id="worked-example-5" class="section level2">
+<h2>Worked example</h2>
+<p>How to read outputs from R and plot results.</p>
+<p></br></p>
+</div>
+</div>
+<div id="other-relevant-pages" class="section level1">
+<h1><i class="far fa-lightbulb"></i> Other relevant pages</h1>
+<p>Links to general linear models page, ANOVA, Categorical, Multiple regression etc.</p>
 </div>
 
 
