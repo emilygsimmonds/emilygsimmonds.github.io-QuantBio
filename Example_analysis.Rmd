@@ -258,7 +258,7 @@ How to read outputs from R and plot results.
 
 </br>
 
-# <i class="far fa-lightbulb"></i> Other relevant pages
+# Other relevant pages
 
 Links to general linear models page, ANOVA, Categorical, Multiple regression etc. 
 
