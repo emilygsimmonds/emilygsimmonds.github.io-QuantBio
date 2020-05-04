@@ -681,7 +681,8 @@ plot(x, y, type = &quot;p&quot;, main = &quot;My plot&quot;, xlab = &quot;x&quot
 <p>When starting a function, you should start with the name of the function and state if the function takes input values, give these arguments name e.g. <code>x</code> and <code>y</code>.</p>
 <p>Then you write the code you want the function to perform inside the branches <span class="math inline">\({}\)</span>. <strong>You must indicate what you want your function to output using the <code>return()</code> function</strong>.</p>
 <p><span style="color:blue"> Have a look at the example function below. Can you work out what it does? </span></p>
-<pre class="r"><code>myfunction &lt;- function(x, y) # myfunction is the name, x and y are the names of the inputs (arugments) function begins here
+<pre class="r"><code>myfunction &lt;- function(x, y) # myfunction is the name, x and y are the names of the inputs (arugments) function begins
+# here
 {
     p &lt;- x * y
     return(p)  # we want to output p
@@ -729,7 +730,8 @@ datafile</code></pre>
 <div id="importing-data-from-the-internet" class="section level2">
 <h2>Importing data from the internet</h2>
 <p>It is also possible to import a file directly from the internet, you can do this for <code>test_data.csv</code> because it is stored on the internet. To do this you use the whole url for the file instead of just the file name.</p>
-<pre class="r"><code>datafile &lt;- read.csv(&quot;https://www.math.ntnu.no/emner/ST2304/2020v/RIntro/test_data.csv&quot;, header = TRUE)</code></pre>
+<pre class="r"><code>datafile &lt;- read.csv(&quot;https://www.math.ntnu.no/emner/ST2304/2020v/RIntro/test_data.csv&quot;, 
+    header = TRUE)</code></pre>
 <p><span style="color:blue"> Try and run the R code above. What does the argument <code>header=TRUE</code> do? </span></p>
 <p>Reading and writing data into R may be a bit tricky if the format of the data is not defined exactly, we will try and stick to <code>.csv</code> in the beginning.</p>
 </div>
