@@ -10,7 +10,7 @@ output:
 </br>
 </br>
 
-# Introduction 
+## Introduction 
 
 In this section, we will look at how we can use simple linear regression to analyse data with a continuous numeric response and a numeric explanatory variable. Linear regression is a type of linear model, you might want to visit the general page on linear models before reading the rest of this information [click here]().
 
@@ -42,7 +42,7 @@ Linear regression assumes a causal relationship between $X$ and $Y$, i.e. it ass
 
 </br>
 
-# <i class="far fa-question-circle"></i> Which questions? 
+## <i class="far fa-question-circle"></i> Which questions? 
  
 Example questions you can answer with linear regression:
  
@@ -54,11 +54,11 @@ Example questions you can answer with linear regression:
  
 </br>
 
-# <i class="fas fa-table"></i> Type of data that should be used {- .tabset}
+## <i class="fas fa-table"></i> Type of data that should be used {- .tabset}
 
 </br>
 
-## Theory
+### Theory
 
 As stated earlier on this page, you choose to use a linear regression when you have continuous numeric a response variable and continuous numeric explanatory variables. A **simple linear regression** has only one explanatory variable, a **multiple linear regression** has more than one. There is no upper limit in theory, but if you add too many, your model will less complex than reality.
 
@@ -93,7 +93,7 @@ rasterImage(dragon,80,0,105,25)
 ```
 
 
-## Worked example 
+### Worked example 
 
 There are several ways to check the type of data that your variables are in R. 
 
@@ -132,11 +132,11 @@ as.numeric(DragonData$Colour)
 ```
 </br>
 
-# <i class="fas fa-project-diagram"></i> Details of the model {- .tabset}
+## <i class="fas fa-project-diagram"></i> Details of the model {- .tabset}
 
 </br>
 
-## Theory
+### Theory
 
 When we create a model we want to represent mathematically how the data were generated. 
 
@@ -150,11 +150,11 @@ $$
 Y_i = \color{orange}\alpha + \color{blue}\beta X_i + \color{red}\epsilon_i
 $$
 
-### Assumptions
+#### Assumptions
 
 </br>
 
-## Worked example 
+### Worked example 
 
 </br>
 
@@ -187,11 +187,11 @@ coef(model1)
 coef(model2)
 ```
 
-# <i class="fas fa-laptop"></i> Parameters {- .tabset}
+## <i class="fas fa-laptop"></i> Parameters {- .tabset}
 
 </br>
 
-## Theory
+### Theory
 
 Here it would give more examples on what the parameters mean.
 
@@ -199,18 +199,18 @@ Residuals introduced here.
 
 </br>
 
-## Worked example 
+### Worked example 
 
 This would show where to find the parameters e.g. more on coef and summary etc and resid. 
 
 </br>
 
 
-# <i class="fas fa-arrows-alt-h"></i> How to quantify uncertainty {- .tabset}
+## <i class="fas fa-arrows-alt-h"></i> How to quantify uncertainty {- .tabset}
 
 </br>
 
-## Theory
+### Theory
 
 This would focus on theory of uncertainty in parameter estimates and prediction. 
 
@@ -218,18 +218,18 @@ Explain how to calculate and why.
 
 </br>
 
-## Worked example 
+### Worked example 
 
 Focus on doing this in R, e.g. confint() or summary() then 2*SE
 
 </br>
 
 
-# <i class="fas fa-tasks"></i> How to check the model {- .tabset}
+## <i class="fas fa-tasks"></i> How to check the model {- .tabset}
 
 </br>
 
-## Theory
+### Theory
 
 Explain why you need to check assumptions, what things to check for and what problems they could have.
 
@@ -237,28 +237,28 @@ Also how to fix them.
 
 </br>
 
-## Worked example 
+### Worked example 
 
 How to create diagnostic plots in R and some interpretation and fixing examples e.g. log() and sqrt().
 
 </br>
 
 
-# <i class="far fa-lightbulb"></i> How to draw conclusions {- .tabset}
+## <i class="far fa-lightbulb"></i> How to draw conclusions {- .tabset}
 
-## Theory
+### Theory
 
 What each parameter can mean for a result and how to word statistical conclusions. 
 
 </br>
 
-## Worked example 
+### Worked example 
 
 How to read outputs from R and plot results.
 
 </br>
 
-# Other relevant pages
+## Other relevant pages
 
 Links to general linear models page, ANOVA, Categorical, Multiple regression etc. 
 
