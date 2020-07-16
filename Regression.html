@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Simple linear regression</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { background-color: #f8f8f8; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="../css/style-chapters.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">HOME</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    The basics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Introductions</li>
+    <li class="divider"></li>
+    <li>
+      <a href="What_is_statistics.html">What is statistics?</a>
+    </li>
+    <li>
+      <a href="Quantitative_methods_in_biology.html">Quantitative methods in biology</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">All about data</li>
+    <li class="divider"></li>
+    <li>
+      <a href="Types_of_data.html">Types of data</a>
+    </li>
+    <li>
+      <a href="Data_visualisation.html">Data visualisation</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Describing data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">General statistical theory</li>
+    <li class="divider"></li>
+    <li>
+      <a href="Describing_data.html">Probability</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Random variables</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Hypothesis testing</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Statistical modelling</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Parameter estimation</a>
+    </li>
+    <li>
+      <a href="Describing_data.html">Uncertainty</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Introductions</li>
+    <li class="divider"></li>
+    <li>
+      <a href="R_tutorial.html">General intro</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Errors and warnings</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Finding help</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="R_tutorial.html">Plotting</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Data management</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Advanced</li>
+    <li class="divider"></li>
+    <li>
+      <a href="R_tutorial.html">for loops</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Writing functions</a>
+    </li>
+    <li>
+      <a href="R_tutorial.html">Tips and tricks</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">For frequencies and probailities</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">For categorical explanatory variables</li>
+    <li class="divider"></li>
+    <li>
+      <a href="Example_analysis.html">Example</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">For numeric explanatory variables</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">For mixed explanatory variables</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">For non-normal error</li>
+    <li class="divider"></li>
+  </ul>
+</li>
+<li>
+  <a href="index.html">Glossary</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/emilygsimmonds/QuantBio/tree/gh-pages">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Simple linear regression</h1>
+
+</div>
+
+
+<div id="before-you-start" class="section level1 facta">
+<h1>Before you start</h1>
+<p>You should be familiar with basic statistical theory, basics of R, continuous and categorical data, hypothesis testing, statistical modelling, and linear models.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In this section, we will look at how we can use simple linear regression to analyse data with a continuous numeric response and a numeric explanatory variable. Linear regression is a type of linear model.</p>
+<p></br></p>
+<p>Linear regression has two motivations. The first is called <strong>inference</strong>. This is when you want to say something about a population from a sample. The second is <strong>prediction</strong>, where we use models to predict values of the response for specified values of the explanatory variable. These predictions can either be for observed values of the explanatory (mainly for plotting), for unobserved values of the explanatory variable within the same range as observations, or for novel values of the explanatory variable outside the range of observations (this is more risky! - more on this later).</p>
+<p></br></p>
+<p><strong>Example inference question:</strong></p>
+<p>does the height of plants increase with increasing temperatures?</p>
+<p><strong>Example prediction question:</strong></p>
+<p>how tall will a plant be if mean temperatures increase by 2°C?</p>
+<p><img src="PlantHeightTemp.png" height="150"></p>
+<p></br></p>
+<p></br></p>
+<p>In simple terms, we fit a straight line to:</p>
+<ol style="list-style-type: decimal">
+<li><p>estimate a relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span></p></li>
+<li><p>predict change in <span class="math inline">\(Y\)</span> from change in <span class="math inline">\(X\)</span>.</p></li>
+</ol>
+<p>Linear regression assumes a causal relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, i.e. it assumes that <span class="math inline">\(X\)</span> does something to <span class="math inline">\(Y\)</span>. However, we can never actually test this, we can only quantify the patterns. To test if <span class="math inline">\(X\)</span> really does have a causal affect on <span class="math inline">\(Y\)</span>, you would need experiments. It is our job when analysing data, to decide whether we can assume causality or not. For some examples of when causality is not a sensible assumption <a href="https://www.tylervigen.com/spurious-correlations">click here</a>.</p>
+<pre><code>## Parsed with column specification:
+## cols(
+##   MathsPHD = col_double(),
+##   UraniumUS = col_double()
+## )</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /> <em>Figure X: Scatterplot of number of maths PhDs awarded in a year against the amount of uranium stored in US power plants annually. Smooth line indicates a regression line for this data with the 95% confidence interval as the shaded area.</em></p>
+<p></br></p>
+</div>
+<div id="which-questions" class="section level2">
+<h2><i class="far fa-question-circle"></i> Which questions?</h2>
+<p>Example questions you can answer with linear regression:</p>
+<ul>
+<li>How does temperature change with time?</li>
+<li>How does the amount of crime change with temperature?</li>
+<li>How does relative plant biomass change with light intensity?</li>
+<li>What will the temperature be in 2100?</li>
+<li>How tall will someone be if they have hair 30cm long?</li>
+</ul>
+<p></br></p>
+</div>
+<div id="type-of-data" class="section level2 tabset tabset-fade">
+<h2><i class="fas fa-table"></i> Type of data</h2>
+<p></br></p>
+<div id="theory" class="section level3">
+<h3>Theory</h3>
+<p>A linear regression is used when you have continuous numeric response variable and a continuous numeric explanatory variables. A <strong>simple linear regression</strong> has only one explanatory variable, a <strong>multiple linear regression</strong> has more than one. There is no upper limit in theory, but if you add too many, your model will be less complex than reality.</p>
+<p><strong>Examples of continuous numeric variables</strong>:</p>
+<ul>
+<li>Temperature</li>
+<li>Rainfall</li>
+<li>Distance</li>
+<li>Height</li>
+<li>Weight</li>
+</ul>
+<p></br></p>
+<p><strong>Always remember to check that the way your variables are classified in R is the same format you expect.</strong> It is a common mistake for a variable that should be numeric to be classified as a Factor, or a Factor as a character string etc.</p>
+<p>You can check the way R has classified your variables using the Environment panel, printing the object by typing its name in the R console, or using the <code>str()</code> function.</p>
+<p>If the classification R has given the variables doesn’t match what you expect, you can change the classification using functions such as: <code>as.numeric()</code>, <code>as.factor()</code>, or <code>as.integer()</code>. These <code>as.</code> functions exist for every data type.</p>
+<p></br></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">ExampleData</a></code></pre></div>
+<pre><code>## # A tibble: 100 x 3
+##         x     y     z
+##     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1   4.77  1        1
+##  2   5.02  1.49     2
+##  3  -7.98  1.99     3
+##  4  -7.3   2.48     4
+##  5 -23.0   2.98     5
+##  6  13.2   3.47     6
+##  7  16.4   3.97     7
+##  8   5.71  4.46     8
+##  9  26.6   4.96     9
+## 10  11.2   5.45    10
+## # … with 90 more rows</code></pre>
+<p></br></p>
+</div>
+<div id="worked-example" class="section level3">
+<h3>Worked example</h3>
+<p>For this worked example we will be using some data on dive depths of marine mammals.</p>
+<p><img src="MarineMammals.png" height="200"></p>
+<p><em>Figure X: Illustration of marine mammals by Emily G. Simmonds.</em></p>
+<p></br></p>
+<div id="introduction-to-the-data" class="section level4">
+<h4>Introduction to the data</h4>
+<p>These data have four variables; species, maximum recorded dive depth in metres, body weight in kilograms, and taxonomic group.</p>
+<p>The data were collected from a variety of sources and cover several taxonomic groups (including polar bear, sea otters, baleen whales, toothed whales, seals, sea lions).</p>
+<details>
+<p><summary> Full list of data sources</summary></p>
+<p>Sources:</p>
+<ul>
+<li><a href="http://www.bbc.co.uk/earth/story/20150115-extreme-divers-defy-explanation" class="uri">http://www.bbc.co.uk/earth/story/20150115-extreme-divers-defy-explanation</a></li>
+<li><a href="https://www.researchgate.net/figure/Maximum-depth-and-duration-of-dive-tagged-blue-whales_tbl1_11900120" class="uri">https://www.researchgate.net/figure/Maximum-depth-and-duration-of-dive-tagged-blue-whales_tbl1_11900120</a></li>
+<li><a href="http://whitelab.biology.dal.ca/rwb/humpback.htm" class="uri">http://whitelab.biology.dal.ca/rwb/humpback.htm</a></li>
+<li><a href="https://books.google.co.uk/books?id=-dXAcVFhkuQC&amp;pg=PA33&amp;lpg=PA33&amp;dq=max+recorded+humpback+dive&amp;source=bl&amp;ots=mJvyxA4e3S&amp;sig=ACfU3U3ZFOnypZ0Rvej3VpK11Fpci-UfAg&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwiHgq3enNbpAhXFSxUIHfCTD9MQ6AEwDnoECAkQAQ#v=onepage&amp;q=max%20recorded%20humpback%20dive&amp;f=false" class="uri">https://books.google.co.uk/books?id=-dXAcVFhkuQC&amp;pg=PA33&amp;lpg=PA33&amp;dq=max+recorded+humpback+dive&amp;source=bl&amp;ots=mJvyxA4e3S&amp;sig=ACfU3U3ZFOnypZ0Rvej3VpK11Fpci-UfAg&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwiHgq3enNbpAhXFSxUIHfCTD9MQ6AEwDnoECAkQAQ#v=onepage&amp;q=max%20recorded%20humpback%20dive&amp;f=false</a></li>
+<li><a href="https://www.npolar.no/en/species/walrus/" class="uri">https://www.npolar.no/en/species/walrus/</a></li>
+<li><a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1748-7692.2005.tb01228.x" class="uri">https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1748-7692.2005.tb01228.x</a></li>
+<li><a href="https://teara.govt.nz/en/diagram/6175/ocean-dive-depths" class="uri">https://teara.govt.nz/en/diagram/6175/ocean-dive-depths</a></li>
+<li><a href="https://www.researchgate.net/publication/260209989_Advances_in_non-lethal_research_on_Antarctic_minke_whales_biotelemetry_photo-identification_and_biopsy_sampling" class="uri">https://www.researchgate.net/publication/260209989_Advances_in_non-lethal_research_on_Antarctic_minke_whales_biotelemetry_photo-identification_and_biopsy_sampling</a></li>
+<li><a href="https://www.dolphincommunicationproject.org/index.php/the-latest-buzz/field-reports/bahamas-3/bahamas-2000/item/93037-how-deep-can-dolphins-dive" class="uri">https://www.dolphincommunicationproject.org/index.php/the-latest-buzz/field-reports/bahamas-3/bahamas-2000/item/93037-how-deep-can-dolphins-dive</a></li>
+<li><a href="https://books.google.no/books?id=2rkHQpToi9sC&amp;pg=PA325&amp;lpg=PA325&amp;dq=max+recorded+common+dolphin+dive&amp;source=bl&amp;ots=hFnuNx8dwr&amp;sig=ACfU3U0Og9623-SPJkxROGsodqDcuEeDNQ&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwizoOnNodbpAhWyxaYKHW9hAHMQ6AEwDHoECAkQAQ#v=onepage&amp;q=max%20recorded%20common%20dolphin%20dive&amp;f=false" class="uri">https://books.google.no/books?id=2rkHQpToi9sC&amp;pg=PA325&amp;lpg=PA325&amp;dq=max+recorded+common+dolphin+dive&amp;source=bl&amp;ots=hFnuNx8dwr&amp;sig=ACfU3U0Og9623-SPJkxROGsodqDcuEeDNQ&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwizoOnNodbpAhWyxaYKHW9hAHMQ6AEwDHoECAkQAQ#v=onepage&amp;q=max%20recorded%20common%20dolphin%20dive&amp;f=false</a></li>
+<li><a href="https://polarbearscience.com/2018/10/15/scientific-study-finds-polar-bears-excel-at-diving-contradicting-previous-expert-opinion/" class="uri">https://polarbearscience.com/2018/10/15/scientific-study-finds-polar-bears-excel-at-diving-contradicting-previous-expert-opinion/</a></li>
+<li><a href="https://books.google.no/books?id=kkRKJCofvXMC&amp;pg=PA445&amp;lpg=PA445&amp;dq=max+recorded+sea+otter+dive&amp;source=bl&amp;ots=HX_ypXO6zq&amp;sig=ACfU3U1ugMJRJtd21NLfrpDVirSmCx15kA&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwjo29WxotbpAhUGy6YKHQzmDHMQ6AEwAHoECAsQAQ#v=onepage&amp;q=max%20recorded%20sea%20otter%20dive&amp;f=false" class="uri">https://books.google.no/books?id=kkRKJCofvXMC&amp;pg=PA445&amp;lpg=PA445&amp;dq=max+recorded+sea+otter+dive&amp;source=bl&amp;ots=HX_ypXO6zq&amp;sig=ACfU3U1ugMJRJtd21NLfrpDVirSmCx15kA&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwjo29WxotbpAhUGy6YKHQzmDHMQ6AEwAHoECAsQAQ#v=onepage&amp;q=max%20recorded%20sea%20otter%20dive&amp;f=false</a></li>
+<li><a href="https://nammco.no/marinemammals/" class="uri">https://nammco.no/marinemammals/</a></li>
+<li><a href="https://www.fisheries.noaa.gov/species/" class="uri">https://www.fisheries.noaa.gov/species/</a></li>
+<li><a href="https://www.doc.govt.nz/nature/native-animals/marine-mammals/---" class="uri">https://www.doc.govt.nz/nature/native-animals/marine-mammals/---</a>&gt;</li>
+</ul>
+</details>
+<p></br></p>
+<p>You can find the data <a href="">here</a> if you want to follow along with this example. It is a <code>.csv</code> file with column headings.</p>
+<p>The first thing we want to do with the data once it is imported is to look at it. We will do this by looking at the raw data and making a plot.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">DiveData</a></code></pre></div>
+<pre><code>## # A tibble: 30 x 4
+##    Species                 MaxDepth BodySizeKG Group   
+##    &lt;fct&gt;                      &lt;int&gt;      &lt;dbl&gt; &lt;fct&gt;   
+##  1 Orca                         264       4500 Twhale  
+##  2 WeddellSeal                  741        500 Pinniped
+##  3 LongFinnedPilot              828       1300 Twhale  
+##  4 ShortFinnedPilot            1019       2000 Twhale  
+##  5 BlainvillesBeakedWhale      1408        900 Twhale  
+##  6 NorthernBottlenoseWhale     1453       8000 Twhale  
+##  7 SouthernElephantSeal        1653       3000 Pinniped
+##  8 BairdsBeakedWhale           1777      12000 Twhale  
+##  9 SpermWhale                  2035      27000 Twhale  
+## 10 CuviersBeakedWhale          2992       2500 Twhale  
+## # … with 20 more rows</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">ggplot</span>(DiveData, <span class="kw">aes</span>(<span class="dt">x=</span>BodySizeKG, <span class="dt">y=</span>MaxDepth, <span class="dt">color=</span>Group))<span class="op">+</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="Regression_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># load the picture and add</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#marinemammals &lt;- readPNG(&quot;MarineMammals.png&quot;)</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#rasterImage(marinemammals,80,0,105,25)</span></a></code></pre></div>
+<p><em>Figure X: Scatterplot of body size against maximum dive depth for marine mammals. Colours indicate taxonomic group.</em></p>
+<p>This gives some idea of what our data look like. We can see that two of our variables are factors (Species and Group). One of our variables is clearly continuous numeric (MaxDepth) and one is integer (BodySizeKG). From our knowledge of the characteristics of body size, we know that this actually is continuous even though the scientists who measured it have rounded to make it integer. Therefore, we will change this to be numeric to ensure R treats it the right way in our analyses.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">DiveData &lt;-<span class="st"> </span><span class="kw">mutate</span>(DiveData, <span class="dt">BodySizeKG =</span> <span class="kw">as.numeric</span>(BodySizeKG))</a></code></pre></div>
+<p>In this example, we are interested in <strong>whether body size (kg) influences maximum dive depth (m) in marine mammals.</strong> To answer this question we will need the variables: <code>BodySizeKG</code> and <code>MaxDepth</code>. We will not need <code>Species</code> or <code>Group</code> for now, but we might need them later.</p>
+<p></br></p>
+<p>Now we have familiarised ourselves with our data, know what question we want to ask, and which variables we need to use, <strong>we are ready to start an analysis.</strong></p>
+<p></br></p>
+</div>
+</div>
+</div>
+<div id="model-details" class="section level2 tabset tabset-fade">
+<h2><i class="fas fa-project-diagram"></i> Model details</h2>
+<p></br></p>
+<div id="theory-1" class="section level3">
+<h3>Theory</h3>
+<p>When we create a model we want to represent mathematically how the data were generated.</p>
+<p>When we use a regression model (this is also true for linear models) make an assumption that there is a linear relationship between our two variables. Mathematically, we say that we can capture the data generation process with a straight line and some error.</p>
+<p>The line is defined by two parameters: <span style="color:orange"><strong><span class="math inline">\(\alpha\)</span></strong></span> = the intercept, where the line crosses the y-axis and <span style="color:blue"><strong><span class="math inline">\(\beta\)</span></strong></span> = the slope of the line (steepness/gradient), it is how much <span class="math inline">\(Y\)</span> changes for every increase in 1 unit of <span class="math inline">\(X\)</span>. We can alter the position of the line using these two parameters. The final part of the model is <span style="color:red"><strong><span class="math inline">\(\epsilon\)</span></strong></span>, which is the error around the line, we estimate this using a parameter <strong><span class="math inline">\(\sigma^{2}\)</span></strong> that is the variance of the error.</p>
+<p>We can write these model components as and equation in terms of <span class="math inline">\(Y\)</span>:</p>
+<p><span class="math display">\[
+Y_i = \color{orange}\alpha + \color{blue}\beta X_i + \color{red}\epsilon_i
+\]</span></p>
+<div id="assumptions" class="section level4">
+<h4>Assumptions</h4>
+<p>There are several assumptions that we make when using a linear regression model:</p>
+<ul>
+<li>The relationship between X and Y is linear</li>
+<li>Residuals (error) are normally distributed</li>
+<li>The residuals have a mean of 0</li>
+<li>The variance of the residuals is equal for all fitted values (homoscedasticity)</li>
+<li>There are no outliers</li>
+<li>Each value of Y is independent</li>
+</ul>
+<p></br></p>
+<p>All of these assumptions should be met for the model to work properly. We check five of them after we have fit the model. The independence of Y should be determined during data collection. Data should be collected in a way that ensures each Y is independent of the others.</p>
+<p></br> </br></p>
+</div>
+<div id="writing-the-model-in" class="section level4">
+<h4>Writing the model in <i class="fab fa-r-project"></i></h4>
+<p></br></p>
+<p>To fit the simple linear regression in <i class="fab fa-r-project"></i> we will use the <code>lm()</code> function.</p>
+<p><code>lm()</code> stands for linear model (should seem familiar). It takes several arguments:</p>
+<ul>
+<li>formula in form: <code>y~x</code></li>
+<li>data: your data object</li>
+</ul>
+<p>The function will fit the regression model using maximum likelihood estimation and give us the maximum likelihood estimates of <span style="color:orange"><span class="math inline">\(\alpha\)</span></span> and <span style="color:blue"><span class="math inline">\(\beta\)</span></span> as an output. It does also estimate <span class="math inline">\(\sigma^{2}\)</span> of the error, but it does not report this.</p>
+<p></br></p>
+<p>To use the <code>lm()</code> function you first need to think about the formula argument, the <code>y~x</code> part. The same way as in the equation above, the letter <span class="math inline">\(Y\)</span> always corresponds to the response variable (the thing we are trying to explain) and <span class="math inline">\(X\)</span> to an explanatory variable (the thing we assume affects the response).</p>
+<p>Therefore, to write the formula for the <code>lm()</code> function, you need to know which variable is your response and which is your explanatory. You can work this out by thinking about what question you want to ask with your model e.g.</p>
+<p></br> <strong>Does temperature influence wing length of butterflies?</strong></p>
+<p><img src="Coliashecla.png" height="200"></p>
+<p><em>Figure X: Cartoon illusration of the Colias hecla butterfly by Emily G Simmonds.</em></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">InsectDataF &lt;-<span class="st"> </span>InsectData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex <span class="op">==</span><span class="st"> &quot;f&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">                              </span><span class="kw">summarise</span>(<span class="dt">AvWingLength =</span> <span class="kw">mean</span>(winglength), </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">                                        <span class="dt">Temp =</span> <span class="kw">mean</span>(temp)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="st">                              </span><span class="kw">ungroup</span>()</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="kw">ggplot</span>(InsectDataF, <span class="kw">aes</span>(<span class="dt">x =</span> Temp, <span class="dt">y =</span> AvWingLength))<span class="op">+</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Mean wing length in mm&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Temperature for May/June (ºC)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="Regression_files/figure-html/unnamed-chunk-6-1.png" width="672" /> <em>Figure X: Scatterplot of the butterfly wing length data.</em></p>
+<p>For this example we use some data on <em>Colias hecla</em>, the northern clouded yellow butterfly. These data were taken from the paper: High-Arctic butterflies become smaller with rising temperatures by Joseph J. Bowden, Anne Eskildsen, Rikke R. Hansen, Kent Olsen, Carolyn M. Kurle and Toke T. Høye <em>Biology Letters</em> Volume 11, Issue 10 Published:01 October 2015 [<a href="doi:10.1098/rspb.2013.0174" class="uri">doi:10.1098/rspb.2013.0174</a>] (<a href="https://doi.org/10.1098/rsbl.2015.0574" class="uri">https://doi.org/10.1098/rsbl.2015.0574</a>). The data are freely available <a href="https://datadryad.org/stash/dataset/doi:10.5061/dryad.43gt3">here</a>. The researchers measured the wing length of the butterflies to the nearest 0.01 mm. They measured many individuals over many years. In this example we will use data from only the females and take the mean wing length for each year. The measure of temperature is the average temperature from May and June in ºC. </br></p>
+<p>Then you can see your explanatory (<span class="math inline">\(Y\)</span>) = temperature, it is the variable that does the influencing.The response (<span class="math inline">\(X\)</span>) = wing length, it is the result.</p>
+<p>We can then plug these variables into the <code>lm()</code> function in the below format using the column names in place of <code>y</code> and <code>x</code> and including our data frame name as the data argument.</p>
+<p></br></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">InsectModel &lt;-<span class="st"> </span><span class="kw">lm</span>(AvWingLength <span class="op">~</span><span class="st"> </span>Temp, <span class="dt">data =</span> InsectDataF)</a></code></pre></div>
+<details>
+<p><summary>I saw an <code>lm()</code> written differently, what’s that about?</summary></p>
+<p>You can use the <code>lm()</code> function without the data argument. If you do this, you need to refer to your (<span class="math inline">\(X\)</span>) and (<span class="math inline">\(Y\)</span>) variables in the <code>y~x</code> formula using a <code>$</code> between the data name and the column name.</p>
+<p><strong>We do not recommend using this approach.</strong> There are several reasons for this but a key one is that when using the <code>$</code> syntax, R sees the variable name as the whole entry <code>DiveData$MaxDepth</code> rather than as the column name <code>MaxDepth</code>. This makes it difficult to use this model for other things e.g. to predict.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">InsectModel_alt &lt;-<span class="st"> </span><span class="kw">lm</span>(InsectDataF<span class="op">$</span>AvWingLength <span class="op">~</span><span class="st"> </span>InsectDataF<span class="op">$</span>Temp)</a></code></pre></div>
+</details>
+<p></br></p>
+<p>You can then look at the results using the function <code>coef()</code>. This takes the output of <code>lm()</code>, the model object, as its argument and extracts the maximum likelihood estimates of <span style="color:orange"><span class="math inline">\(\alpha\)</span></span> and <span style="color:blue"><span class="math inline">\(\beta\)</span></span>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">coef</span>(InsectModel)</a></code></pre></div>
+<pre><code>## (Intercept)        Temp 
+##  22.9337432  -0.1053717</code></pre>
+<p></br></p>
+</div>
+</div>
+<div id="worked-example-1" class="section level3">
+<h3>Worked example</h3>
+<p></br></p>
+<p>This worked example demonstrates how to fit a linear regression model in <i class="fab fa-r-project"></i> using the <code>lm()</code> function for the dive depths example.</p>
+<p>In this example we are asking:</p>
+<p><strong>Does body size influence maximum dive depth in marine mammals?</strong></p>
+<p>Our question is formulated to suggest a direction of causality, we assume body size has a causal effect on maximum dive depth, therefore maximum depth is our response (<span class="math inline">\(Y\)</span>) and body size as our explanatory variable (<span class="math inline">\(X\)</span>).</p>
+<p>We can put these variables into the <code>lm()</code> function in the below format.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">DiveModel &lt;-<span class="st"> </span><span class="kw">lm</span>(MaxDepth <span class="op">~</span><span class="st"> </span>BodySizeKG, <span class="dt">data =</span> DiveData)</a></code></pre></div>
+<p></br></p>
+<p>Great. We have run a model and assigned it to an object name.</p>
+<p>We can look at the maximum likelihood estimates of our model parameters (<span style="color:orange"><span class="math inline">\(\alpha\)</span></span> and <span style="color:blue"><span class="math inline">\(\beta\)</span></span>) using the function <code>coef()</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">coef</span>(DiveModel)</a></code></pre></div>
+<pre><code>##   (Intercept)    BodySizeKG 
+## 755.977336598  -0.005384027</code></pre>
+<p>We will look at interpreting these in the next part of the worked example.</p>
+</div>
+</div>
+<div id="parameters" class="section level2 tabset tabset-fade">
+<h2><i class="fas fa-laptop"></i> Parameters</h2>
+<p></br></p>
+<div id="theory-2" class="section level3">
+<h3>Theory</h3>
+<p></br></p>
+<p>We introduced the three model parameters of a simple linear regression in the section above: <span style="color:orange"><strong><span class="math inline">\(\alpha\)</span></strong></span> = the intercept, <span style="color:blue"><strong><span class="math inline">\(\beta\)</span></strong></span> = the slope of the line (steepness/gradient), and <span style="color:red"><strong><span class="math inline">\(\sigma^{2}\)</span></strong></span> the variance of the error.</p>
+<p></br> <strong>But what do these parameters really mean?</strong> </br></p>
+<p>All regression analyses are fundamentally about using straight lines to represent the relationship between a response (<span class="math inline">\(Y\)</span>) and some explanatory variables (<span class="math inline">\(X\)</span>), called a <strong>regression line</strong>. The parameters of the model determine the placement and gradient of the straight line, as well as representing the distribution of data points around the line.</p>
+<p></br> <img src="Regression_files/figure-html/unnamed-chunk-12-1.png" width="672" /> </br> <em>Figure X: Illustration of a straight line and data.</em></p>
+<p>We will illustrate the meaning of parameters continuing with the insect example from the previous section.</p>
+<p>In this section we will go through each parameter we estimate in a simple linear regression and what it means in terms of the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. </br> </br></p>
+<div id="alpha-the-intercept" class="section level4">
+<h4><span style="color:orange"><span class="math inline">\(\alpha\)</span></span>, the intercept</h4>
+<p>This first parameter gives the value of <span class="math inline">\(Y\)</span> when <span class="math inline">\(X\)</span> = 0, it is the point that the straight line crossed the y-axis.</p>
+<p>In the figure below, the intercept is highlighted.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">ggplot</span>(InsectDataF, <span class="kw">aes</span>(<span class="dt">x=</span>Temp, <span class="dt">y=</span>AvWingLength))<span class="op">+</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&#39;grey70&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">coef</span>(InsectModel)[<span class="dv">1</span>], <span class="dt">slope =</span> <span class="kw">coef</span>(InsectModel)[<span class="dv">2</span>])<span class="op">+</span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">0</span>, <span class="dt">y=</span><span class="kw">coef</span>(InsectModel)[<span class="dv">1</span>]), <span class="dt">colour =</span> <span class="st">&#39;orange&#39;</span>, <span class="dt">size =</span> <span class="dv">3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Mean wing length in mm&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Temperature for May/June (ºC)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="st">  </span><span class="kw">ylim</span>(<span class="dv">21</span>,<span class="dv">24</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="Regression_files/figure-html/unnamed-chunk-13-1.png" width="672" /> <em>Figure X: Plot of regression line and data.</em></p>
+<p></br> If you want to find the maximum likelihood estimate of <span style="color:orange"><span class="math inline">\(\alpha\)</span></span> from your <code>lm()</code> object you can use the <code>coef()</code> function as we did in the previous section. The <span style="color:orange"><span class="math inline">\(\alpha\)</span></span> value is the one labelled <code>(Intercept)</code>, 22.93 in the example below.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">coef</span>(InsectModel)</a></code></pre></div>
+<pre><code>## (Intercept)        Temp 
+##  22.9337432  -0.1053717</code></pre>
+<p></br> </br></p>
+</div>
+<div id="beta-the-slope" class="section level4">
+<h4><span style="color:blue"><span class="math inline">\(\beta\)</span></span>, the slope</h4>
+<p>This second parameter gives the amount of change in <span class="math inline">\(Y\)</span> for every change of 1 in <span class="math inline">\(X\)</span>, it is the gradient of the regression line.</p>
+<p>In the figure below, the intercept is highlighted.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">ggplot</span>(InsectDataF, <span class="kw">aes</span>(<span class="dt">x=</span>Temp, <span class="dt">y=</span>AvWingLength))<span class="op">+</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&#39;grey70&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">coef</span>(InsectModel)[<span class="dv">1</span>], <span class="dt">slope =</span> <span class="kw">coef</span>(InsectModel)[<span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">              <span class="dt">colour =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">size =</span> <span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Mean wing length in mm&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Temperature for May/June (ºC)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb21-7" data-line-number="7"><span class="st">  </span><span class="kw">ylim</span>(<span class="dv">21</span>,<span class="dv">24</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb21-8" data-line-number="8"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="Regression_files/figure-html/unnamed-chunk-15-1.png" width="672" /> <em>Figure X: Plot of regression line and data.</em> </br></p>
+<p>If you want to find the maximum likelihood estimate of <span style="color:blue"><span class="math inline">\(\beta\)</span></span> from your <code>lm()</code> object you can use the <code>coef()</code> function as we did in the previous section. The <span class="math inline">\(\beta\)</span> value is the one labelled by the variable name (<code>x</code> here), -0.11 in the example below.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">coef</span>(InsectModel)</a></code></pre></div>
+<pre><code>## (Intercept)        Temp 
+##  22.9337432  -0.1053717</code></pre>
+<p></br> </br></p>
+<p><strong>Together <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> control the position of the regression line.</strong> They are called the <strong>systematic</strong> part of the model, the bit that links <span class="math inline">\(Y\)</span> to the covariate <span class="math inline">\(X\)</span>. You will notice that we use them to plot the line on our graph using <code>geom_abline()</code>. Changing the intercept shifts how high up on the y-axis the line sits and changing the slope alters the steepness (gradient). But it is important to note that these two parameters are not independent. </br></p>
+<p><strong>The regression line must always pass through the point that represents the mean of <span class="math inline">\(X\)</span> and the mean of <span class="math inline">\(Y\)</span>. (<span class="math inline">\(\bar{X}\)</span>, <span class="math inline">\(\bar{Y}\)</span>).</strong> Therefore, if you change the intercept, the slope must change as well to keep the line going through the (<span class="math inline">\(\bar{X}\)</span>, <span class="math inline">\(\bar{Y}\)</span>) point. You can have a go at doing this below.</p>
+<p></br></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">include_app</span>(<span class="st">&quot;https://shiny.math.ntnu.no/qmbio/Shiny_apps/Regression/&quot;</span>)</a></code></pre></div>
+<iframe src="https://shiny.math.ntnu.no/qmbio/Shiny_apps/Regression/?showcase=0" width="672" height="400px">
+</iframe>
+<p></br> </br></p>
+</div>
+<div id="sigma2-the-variance-of-error" class="section level4">
+<h4><span class="math inline">\(\sigma^{2}\)</span>, the variance of error</h4>
+<p>This is the final parameter we need to estimate for the simple regression and it is a bit different from <span style="color:orange"><span class="math inline">\(\alpha\)</span></span> and <span style="color:blue"><span class="math inline">\(\beta\)</span></span>. This parameter does not relate directly to the shape or position of the regression line, instead, this parameter captures the variance of the data points around that line. This can be called the <strong>random</strong> part of the model, the error. In the case of a simple linear regression, the error is a normally distributed.</p>
+<p>As you can see in the figures above, although we have plotted our fitted line, it is not capturing all of the variation in data. We can see that not all of the data points are sitting on the regression line.</p>
+<p>The value of <span class="math inline">\(Y\)</span> for each <span class="math inline">\(X\)</span> at the regression line is called a <strong>fitted value</strong>. The distance between the fitted values and the values of <span class="math inline">\(Y\)</span> that were actually observed are called <strong>residuals</strong>. You can extract the residuals from your model object using the function <code>residuals()</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">InsectPredictions &lt;-<span class="st"> </span><span class="kw">predict</span>(InsectModel, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">InsectResiduals &lt;-<span class="st"> </span><span class="kw">resid</span>(InsectModel)</a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">highlight &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.509</span>, <span class="fl">-0.509</span>), <span class="dt">prediction =</span> <span class="kw">c</span>(<span class="fl">22.98737</span>, <span class="fl">23.69016</span>))</a></code></pre></div>
+<p></br></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">residuals &lt;-<span class="st"> </span><span class="kw">residuals</span>(InsectModel)</a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">ggplot</span>(InsectDataF, <span class="kw">aes</span>(<span class="dt">x=</span>Temp, <span class="dt">y=</span>AvWingLength))<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&#39;grey70&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>InsectPredictions))<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">xend=</span>Temp, <span class="dt">yend=</span>InsectPredictions), <span class="dt">colour =</span> <span class="st">&#39;red&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="op">-</span><span class="fl">0.509</span>, <span class="dt">y=</span> <span class="fl">22.98737</span>), <span class="dt">colour =</span> <span class="st">&#39;purple&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="op">-</span><span class="fl">0.509</span>, <span class="dt">y=</span> <span class="fl">23.69016</span>), <span class="dt">colour =</span> <span class="st">&#39;purple&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>highlight, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>prediction), <span class="dt">colour=</span><span class="st">&#39;purple&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-10" data-line-number="10"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Mean wing length in mm&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-11" data-line-number="11"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Temperature for May/June (ºC)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-12" data-line-number="12"><span class="st">  </span><span class="kw">ylim</span>(<span class="dv">21</span>,<span class="dv">24</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-13" data-line-number="13"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="Regression_files/figure-html/unnamed-chunk-19-1.png" width="672" /> <em>Figure X: Plot of regression line with residuals highlighted.</em> </br></p>
+<p>The residual is the difference between the observed point and the predicted/fitted point. Therefore, when a data point is below the regression line, the residual will be negative. Above the line the residuals will be positive. E.g. for the fitted value for <span class="math inline">\(X\)</span> = -0.5 is 22.9, the residual = 0.70 (highlighted in purple on the graph above).</p>
+<p></br></p>
+</div>
+<div id="interpreting-the-parameters" class="section level4">
+<h4>Interpreting the parameters</h4>
+<p></br></p>
+<p>Now we know what each of the three parameters in a simple linear regression mean, we can now think about interpreting them.</p>
+<p><strong>Which of the three parameters do you think is most important for answering our research question “Does temperature influence body size of insects?”?</strong></p>
+<p></br></p>
+<details>
+<p><summary>I had a go, now show me the answer.</summary></span></p>
+<p><strong>The slope (<span class="math inline">\(\beta\)</span>).</strong> This is because the gradient or slope of the regression line is what tells us how strong and in what direction the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is. While we need to estimate the intercept of the line and the residual variance, these do not directly tell us about the relationship of interest.</p>
+<p>To predict, we need all of the parameters.</p>
+</details>
+<p></br></p>
+</div>
+</div>
+<div id="worked-example-2" class="section level3">
+<h3>Worked example</h3>
+<p></br></p>
+<p>In the previous section of this worked example, we fit a simple linear regression using the <code>lm()</code> function and looked at the estimates of some parameters using the <code>coef()</code> function. In this section, we will use model theory to interpret what those parameters mean.</p>
+<div id="the-intercept-and-slope" class="section level4">
+<h4>The intercept and slope</h4>
+<p>We already know that the parameters of the intercept and slope control the position and gradient of the regression line. It is the estimates of these two parameters that we get from the <code>coef()</code> function.</p>
+<p></br></p>
+<p>For our dive depths model the estimates are:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">coef</span>(DiveModel)</a></code></pre></div>
+<pre><code>##   (Intercept)    BodySizeKG 
+## 755.977336598  -0.005384027</code></pre>
+<p></br></p>
+<p>The intercept is 756 m and the slope of the relationship between body size and dive depth is -0.005.</p>
+<p>In this case, the intercept is not that interesting. It tells us the expected value of <span class="math inline">\(Y\)</span> (maximum dive depth) when <span class="math inline">\(X\)</span> (body size) = 0. It does not make a lot of biological sense to know the expected dive depth of a marine mammal that weighs 0 kg.</p>
+<p>The slope on the other hand is interesting. It tells us the direction and strength of the relationship between body size and maximum dive depth. In this case our model estimates that for every increase of 1 kg in body size, marine mammals will have a maximum dive depth that is 0.005 m less deep. In other words, as the slope is negative, we can see this is a negative relationship and as <span class="math inline">\(X\)</span> increases <span class="math inline">\(Y\)</span> decreases.</p>
+<p></br></p>
+</div>
+<div id="residual-variance" class="section level4">
+<h4>Residual variance</h4>
+<p>The <code>coef()</code> function can give us the maximum likelihood estimates of the intercept and slope parameters, but it hasn’t given any information on the final parameter <span class="math inline">\(\sigma^{2}\)</span>. To get an estimator of this parameter, we need to use the <code>residuals()</code> function to extract the residuals from our model and the <code>var()</code> function to calculate the variance of our model residuals.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">DiveResiduals &lt;-<span class="st"> </span><span class="kw">residuals</span>(DiveModel)</a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">sigma2 &lt;-<span class="st"> </span><span class="kw">var</span>(DiveResiduals)</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3">sigma2</a></code></pre></div>
+<pre><code>## [1] 508212.3</code></pre>
+<p>For this model the <span class="math inline">\(\sigma^{2}\)</span> = 508212. This number is not very interesting to us in terms of answering whether body size influences dive depth. But we will use it for prediction later.</p>
+<p></br> </br></p>
+</div>
+<div id="plotting-the-results" class="section level4">
+<h4>Plotting the results</h4>
+<p>As well as looking at the maximum likelihood estimates of the parameters from the simple linear regression, we can also plot the results.</p>
+<p>To do this, we will use <code>ggplot()</code> with <code>geom_line()</code>. We will also need to use a new function called <code>predict()</code>.</p>
+<p>To make this first plot, we only need to use two arguments:</p>
+<ul>
+<li><code>object</code> = your model object</li>
+<li><code>type</code> = “response”, which means predict on the response scale</li>
+</ul>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">DepthPredictions &lt;-<span class="st"> </span><span class="kw">predict</span>(DiveModel, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a></code></pre></div>
+<p></br></p>
+<p>Once we have created predictions of <span class="math inline">\(Y\)</span> from the model object, we can then plot these using <code>geom_line()</code> as in the code below.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">ggplot</span>(DiveData, <span class="kw">aes</span>(<span class="dt">x=</span>BodySizeKG, <span class="dt">y=</span>MaxDepth))<span class="op">+</span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&#39;grey70&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>DepthPredictions))<span class="op">+</span></a>
+<a class="sourceLine" id="cb32-4" data-line-number="4"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Maximum Dive Depth (m)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb32-5" data-line-number="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Body Size (kg)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb32-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="Regression_files/figure-html/unnamed-chunk-23-1.png" width="672" /> <em>Figure X: Scatter plot of dive depths against body size. Line is the regression line from a linear model.</em> </br></p>
+<p>In the next section we will look at how to add uncertainty to these plots and our interpretation.</p>
+<p></br></p>
+</div>
+</div>
+</div>
+<div id="quantify-uncertainty" class="section level2 tabset tabset-fade">
+<h2><i class="fas fa-arrows-alt-h"></i> Quantify uncertainty</h2>
+<p></br></p>
+<div id="theory-3" class="section level3">
+<h3>Theory</h3>
+<p></br> You should already know that statistics does not give a single correct answer. When we estimate the values of parameters in our statistical model, there are many different values that could plausibly have produced our observed data. Some of these are more likely than others but others will have very similar likelihoods.</p>
+<p>A simple linear regression is no different. We still need to consider and present the uncertainty in the parameters we estimate.</p>
+<p>The <code>lm()</code> function uses maximum likelihood estimation for parameter estimation. Therefore, our consideration of uncertainty for these models follows the same principles as discussed <a href="link%20to%20ML%20page">here</a>. We will quantify uncertainty using <strong>standard errors</strong>, <strong>confidence intervals</strong>, and <strong>prediction intervals</strong> which should be familiar to you but head to the <a href="">uncertainty</a> pages if you need a recap.</p>
+<p></br></p>
+<p>For any regression there are two different types of uncertainty we will look at <strong>uncertainty in our line parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span></strong> and <strong>uncertainty in a prediction of <span class="math inline">\(Y\)</span></strong>.</p>
+<div id="uncertainty-in-the-estimates-of-alpha-and-beta" class="section level4">
+<h4>Uncertainty in the estimates of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span></h4>
+<div id="standard-error" class="section level5">
+<h5>Standard error</h5>
+<p><strong>The standard error of a parameter is the standard deviation of its sampling distribution. It gives a measure of the spread of the sampling distribution i.e. our uncertainty.</strong> To find the standard errors for the estimates of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> we can use the <code>summary()</code> function. The argument that <code>summary()</code> takes is a model object, the output from <code>lm()</code>. This function gives a big table with lots of information. The first line shows the model formula used for the model object. The second line shows a summary of the residuals of the model and the standard errors are shown as the second column in the third part, <code>Coefficients:</code>.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">summary</span>(InsectModel)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = AvWingLength ~ Temp, data = InsectDataF)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.54745 -0.19618 -0.09290  0.07555  0.70279 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  22.9337     0.1396 164.227   &lt;2e-16 ***
+## Temp         -0.1054     0.0945  -1.115    0.282    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3417 on 15 degrees of freedom
+## Multiple R-squared:  0.07655,    Adjusted R-squared:  0.01498 
+## F-statistic: 1.243 on 1 and 15 DF,  p-value: 0.2824</code></pre>
+<p></br></p>
+<p>If we take the <code>summary()</code> of the InsectModel, we can see the standard error or the intercept (<span class="math inline">\(\alpha\)</span>) is 0.1396, and the standard error for the slope (<span class="math inline">\(\beta\)</span>) is 0.0945.</p>
+<p>For both parameters, the standard error is smaller than the estimated effect. <strong>But, how small is small enough?</strong></p>
+<p></br></p>
+</div>
+<div id="confidence-intervals" class="section level5">
+<h5>Confidence intervals</h5>
+<p>For interpretation of the uncertainty, it can be easier to use the standard error to calculate confidence intervals. Confidence intervals indicate the range of plausible values for a parameter. <strong>They represent an interval, that if you were to collect a sample and run the analysis, then repeat that many many times AND each time draw a confidence interval, on average 95% of the time, the true population value of the parameter would be found in within the confidence interval.</strong></p>
+<p></br></p>
+<p>To calculate a confidence interval from a standard error you need to use the formulas:</p>
+<p><span class="math display">\[
+\begin{aligned}
+UpperCI = estimate + (1.96 SE) \\
+LowerCI = estimate - (1.96 SE) \\
+\end{aligned}
+\]</span> 1.96 is used because in a standard normal distribution 95% of the distribution lies within 1.96 standard deviations of the mean. In this case the distribution is the sampling distribution, which is normal for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> and the standard deviation is the standard error.</p>
+<p></br></p>
+<p>Using the formulas above, we can get confidence intervals for the intercept and slope from the InsectModel.</p>
+<p></br></p>
+<details>
+<p><summary> I had a go at calculating, what is the correct answer?</summary></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># INTERCEPT</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="co"># Upper confidence interval</span></a>
+<a class="sourceLine" id="cb35-4" data-line-number="4">UpperCI_intercept &lt;-<span class="st"> </span><span class="fl">22.9337</span> <span class="op">+</span><span class="st"> </span>(<span class="fl">1.96</span><span class="op">*</span><span class="fl">0.1396</span>)</a>
+<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="co"># Lower confidence interval</span></a>
+<a class="sourceLine" id="cb35-6" data-line-number="6">LowerCI_intercept &lt;-<span class="st"> </span><span class="fl">22.9337</span> <span class="op">-</span><span class="st"> </span>(<span class="fl">1.96</span><span class="op">*</span><span class="fl">0.1396</span>)</a>
+<a class="sourceLine" id="cb35-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="co"># Print the interval</span></a>
+<a class="sourceLine" id="cb35-9" data-line-number="9"><span class="kw">c</span>(UpperCI_intercept, LowerCI_intercept) </a></code></pre></div>
+<pre><code>## [1] 23.20732 22.66008</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># SLOPE</span></a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="co"># Upper confidence interval</span></a>
+<a class="sourceLine" id="cb37-4" data-line-number="4">UpperCI_slope &lt;-<span class="st"> </span><span class="fl">-0.1054</span> <span class="op">+</span><span class="st"> </span>(<span class="fl">1.96</span><span class="op">*</span><span class="fl">0.0945</span>)</a>
+<a class="sourceLine" id="cb37-5" data-line-number="5"><span class="co"># Lower confidence interval</span></a>
+<a class="sourceLine" id="cb37-6" data-line-number="6">LowerCI_slope &lt;-<span class="st"> </span><span class="fl">-0.1054</span> <span class="op">-</span><span class="st"> </span>(<span class="fl">1.96</span><span class="op">*</span><span class="fl">0.0945</span>)</a>
+<a class="sourceLine" id="cb37-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb37-8" data-line-number="8"><span class="co"># Print the interval</span></a>
+<a class="sourceLine" id="cb37-9" data-line-number="9"><span class="kw">c</span>(UpperCI_slope, LowerCI_slope) </a></code></pre></div>
+<pre><code>## [1]  0.07982 -0.29062</code></pre>
+</details>
+<p></br></p>
+<p>It is also possible to get R to calculate the confidence intervals for you. To do this you can use the <code>confint()</code> function. The argument is a model object.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">confint</span>(InsectModel)</a></code></pre></div>
+<pre><code>##                 2.5 %      97.5 %
+## (Intercept) 22.636094 23.23139219
+## Temp        -0.306787  0.09604363</code></pre>
+<p></br></p>
+<p>Hopefully these confidence intervals look the same as those you calculated yourself.</p>
+<p></br></p>
+</div>
+<div id="plotting-uncertainty" class="section level5">
+<h5>Plotting uncertainty</h5>
+<p></br></p>
+<p>We have seen how you can quantify uncertainty in our line parameters into numbers. But often in science, it is clearer to show these things visually.</p>
+<p>We can add the confidence intervals to Figure X showing our regression line.</p>
+<p>To do this, we need to generate new predictions with the <code>predict()</code> function. This time, we need to add the argument <code>interval = &quot;confidence&quot;</code>. The <code>interval</code> argument tells R to include predictions of <span class="math inline">\(Y\)</span> based on the upper and lower confidence intervals of the estimates of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. We can then add these to the plot using <code>geom_ribbon()</code></p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">InsectPredictions &lt;-<span class="st"> </span><span class="kw">predict</span>(InsectModel, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>, <span class="dt">interval =</span> <span class="st">&quot;confidence&quot;</span>)</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="co"># turn the predictions into a tibble</span></a>
+<a class="sourceLine" id="cb41-4" data-line-number="4"><span class="co"># and add the x values</span></a>
+<a class="sourceLine" id="cb41-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6">InsectPredictions &lt;-<span class="st"> </span>InsectPredictions <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>(InsectPredictions) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb41-7" data-line-number="7"><span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">x=</span>InsectDataF<span class="op">$</span>Temp)</a>
+<a class="sourceLine" id="cb41-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb41-9" data-line-number="9"><span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb41-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>InsectPredictions, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">ymin=</span>lwr, <span class="dt">ymax=</span>upr), <span class="dt">fill=</span><span class="st">&#39;grey50&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb41-11" data-line-number="11"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>InsectDataF, <span class="kw">aes</span>(<span class="dt">x=</span>Temp, <span class="dt">y=</span>AvWingLength), <span class="dt">colour =</span> <span class="st">&#39;grey70&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb41-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">coef</span>(InsectModel)[<span class="dv">1</span>], <span class="dt">slope =</span> <span class="kw">coef</span>(InsectModel)[<span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb41-13" data-line-number="13">              <span class="dt">colour =</span> <span class="st">&#39;blue&#39;</span>, <span class="dt">size =</span> <span class="dv">1</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb41-14" data-line-number="14"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Mean wing length in mm&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb41-15" data-line-number="15"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Temperature for May/June (ºC)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb41-16" data-line-number="16"><span class="st">  </span><span class="kw">ylim</span>(<span class="dv">21</span>,<span class="dv">24</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb41-17" data-line-number="17"><span class="st">  </span><span class="kw">xlim</span>(<span class="op">-</span><span class="fl">2.9</span>, <span class="fl">0.4</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb41-18" data-line-number="18"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="Regression_files/figure-html/unnamed-chunk-27-1.png" width="672" /> <em>Figure X: Plot of regression line and confidence interval for the insect data.</em> </br></p>
+<p>You will notice that the confidence interval is narrower in the middle and wider at the ends. This is partly to do with the constraint that the regression line must go through the (<span class="math inline">\(\bar{X}\)</span>, <span class="math inline">\(\bar{Y}\)</span>) point so the intercept and slope are not independent. Therefore, the confidence interval will be narrowest close to that point.</p>
+<p></br></p>
+</div>
+</div>
+<div id="uncertainty-in-a-prediction-of-y" class="section level4">
+<h4>Uncertainty in a prediction of <span class="math inline">\(Y\)</span></h4>
+<p>So far, we have looked at uncertainty in parameter estimates using standard errors and confidence intervals but linear regression analyses can also be used for prediction.</p>
+<p>When we use a regression for prediction it has uncertainty. Uncertainty in relationship is captured by confidence intervals. Prediction uncertainty captured by <strong>prediction intervals</strong>. A prediction interval gives a range of values that can be considered likely to contain a future observation.</p>
+<p>For prediction we need to convey uncertainty in estimated relationship and scatter around the line (error).</p>
+<p>So, prediction error includes the variance of the residuals too (<span class="math inline">\(\sigma^2\)</span> is finally useful!). Therefore, prediction intervals are always wider than confidence intervals.</p>
+<p></br></p>
+<p>While confidence intervals are used to represent uncertainty in parameters and to relate them to an underlying population, prediction intervals are used to represent uncertainty in predictions. It gives a plausible range for the next observation of the response (i.e. for the new value of Y). It is a type of confidence interval, but in regression it will be wider than the confidence interval of the line (which includes uncertainty in our parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>). <strong>A 95% prediction interval tells you, if you were to collect a sample and run the analysis, then go out an collect a new observation of the response variable (<span class="math inline">\(Y\)</span>) with particular value of the explanatory variable (<span class="math inline">\(X\)</span>) many many times AND each time draw a prediction interval, 95% of the time, the new observation would fall in within the prediction interval.</strong></p>
+<p></br></p>
+<p>To find the prediction interval for a prediction you need to change the <code>interval</code> argument in the <code>predict()</code> function to <code>=&quot;prediction&quot;</code>. The below example predicts the wing length for a temperate of 10.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">predict</span>(InsectModel, <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">Temp=</span><span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">                             <span class="dt">type=</span><span class="st">&quot;response&quot;</span>, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</a></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 21.88003 19.50497 24.25508</code></pre>
+<p></br></p>
+<p>The predicted wing length is 21.9mm with a prediction interval of 19.5mm to 24.3mm.</p>
+<p></br></p>
+</div>
+</div>
+<div id="worked-example-3" class="section level3">
+<h3>Worked example</h3>
+<p>At the end of the last section, we created a plot of our dive depth data and the estimated linear regression line. Now, we will add uncertainty to that plot.</p>
+<p>First, we should look at the confidence intervals of our parameter estimates.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">round</span>(<span class="kw">confint</span>(DiveModel),<span class="dv">2</span>)</a></code></pre></div>
+<pre><code>##              2.5 %  97.5 %
+## (Intercept) 449.03 1062.93
+## BodySizeKG   -0.02    0.01</code></pre>
+<p></br></p>
+<p>The confidence intervals have been rounded to 2 decimal places to make them easier to read. The intercept interval spans from approx 450 to 1060. The slope interval crosses 0, going from -0.02 to +0.01.</p>
+<p></br></p>
+<p>To add these intervals to the plot, we need to make new predictions including the interval.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">DepthPredictions &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">predict</span>(DiveModel, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>, <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>))</a></code></pre></div>
+<p></br></p>
+<p>Once we have created predictions of <span class="math inline">\(Y\)</span> from the model object, we can then plot these using <code>geom_line()</code> as in the code below.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">DepthPredictions &lt;-<span class="st"> </span>DepthPredictions <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>(DepthPredictions) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">x=</span>DiveData<span class="op">$</span>BodySizeKG)</a></code></pre></div>
+<pre><code>## Warning: The `validate` argument of `as_tibble()` is deprecated as of tibble 2.0.0.
+## Please use the `.name_repair` argument instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>DepthPredictions, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">ymin=</span>lwr, <span class="dt">ymax=</span>upr), <span class="dt">fill=</span><span class="st">&#39;grey50&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>DiveData, <span class="kw">aes</span>(<span class="dt">x=</span>BodySizeKG, <span class="dt">y=</span>MaxDepth),<span class="dt">colour =</span> <span class="st">&#39;grey70&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb49-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>DepthPredictions, <span class="kw">aes</span>(<span class="dt">y=</span>fit, <span class="dt">x=</span>x))<span class="op">+</span></a>
+<a class="sourceLine" id="cb49-5" data-line-number="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Maximum Dive Depth (m)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb49-6" data-line-number="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Body Size (kg)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb49-7" data-line-number="7"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<p><img src="Regression_files/figure-html/unnamed-chunk-31-1.png" width="672" /> <em>Figure X: Scatter plot of dive depths against body size. Line is the regression line from a linear model. Shaded area is 95% confidence interval</em></p>
+<p></br></p>
+<p>The plot shows that the uncertainty in the estimated relationship gets increasingly uncertain as you get to higher body sizes.</p>
+<p></br></p>
+<div id="predicting-dive-depths-for-a-body-size-of-75000kg" class="section level4">
+<h4>Predicting dive depths for a body size of 75000kg</h4>
+<p>A colleague as just found a new species of whale (fictional). The whale washed up on shore in Tromsø, it weighed 75000kg. Based on our linear regression analysis, how deep would we expect it to dive?</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">predict</span>(DiveModel, <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">BodySizeKG=</span><span class="dv">75000</span>), </a>
+<a class="sourceLine" id="cb50-2" data-line-number="2">                             <span class="dt">type=</span><span class="st">&quot;response&quot;</span>, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</a></code></pre></div>
+<pre><code>##        fit       lwr      upr
+## 1 352.1753 -1328.376 2032.727</code></pre>
+<p></br></p>
+<p>The mean prediction is 352m deep. This seems ok. But when we look at the prediction interval, we see that when we include uncertainty, we are not even sure if they whale will dive below the surface by 2km or jump into the air by 1.3km. When we include uncertainty, it is clear that based on the current data and model, we cannot say anything about the possible dive depth of the new whale. We even get biologically unrealistic predictions.</p>
+<p>This is something we will look at in the next section.</p>
+<p></br></p>
+</div>
+</div>
+</div>
+<div id="model-checking" class="section level2 tabset tabset-fade">
+<h2><i class="fas fa-tasks"></i> Model checking</h2>
+<p>We have now have a model, estimates of parameters, and uncertainty. <strong>But how do we know if this model is any good?</strong> </br></p>
+<div id="theory-4" class="section level3">
+<h3>Theory</h3>
+<p>To find out if our model is any good from a theoretical perspective, we need to consider whether it meets the assumptions of the linear regression that are stated in the <strong>Model details</strong> section above.</p>
+<p>To do this, we use graphs called <strong>diagnostic plots</strong>, which can be easily made in R. Each plot tests whether a different assumption has been met. There are three key diagnostic plots that we use for simple linear regression.</p>
+<p></br></p>
+<div id="residuals-vs-fitted-plot" class="section level4">
+<h4>Residuals vs fitted plot</h4>
+<p>This plot tests the assumptions of <strong>The relationship between X and Y is linear</strong>, <strong>The residuals have a mean of 0</strong>, and <strong>The variance of the residuals is equal for all fitted values (homoscedasticity)</strong>.</p>
+<ul>
+<li>The relationship between X and Y is linear</li>
+<li>Residuals (error) are normally distributed</li>
+<li>The residuals have a mean of 0</li>
+<li>The variance of the residuals is equal for all fitted values (homoscedasticity)</li>
+<li>There are no outliers</li>
+<li>Each value of Y is independent </br></li>
+</ul>
+</div>
+</div>
+<div id="worked-example-4" class="section level3">
+<h3>Worked example</h3>
+<p>How to create diagnostic plots in R and some interpretation and fixing examples e.g. log() and sqrt().</p>
+<p></br></p>
+</div>
+</div>
+<div id="draw-conclusions" class="section level2 tabset tabset-fade">
+<h2><i class="far fa-lightbulb"></i> Draw conclusions</h2>
+<div id="theory-5" class="section level3">
+<h3>Theory</h3>
+<p>The confidence intervals show that the estimate of the intercept has low uncertainty relative to the estimate size and is clearly different to 0. But it is the slope we are really interested in for drawing conclusions. The uncertainty for the slope is much larger relative to the mean estimate. In this case, the confidence interval spans 0. In other words, 0 sits between the upper and lower interval because they are different signs (positive and negative). This means that 0 is included in the plausible range of What each parameter can mean for a result and how to word statistical conclusions.</p>
+<p>Also include R squared here.</p>
+<p></br></p>
+</div>
+<div id="worked-example-5" class="section level3">
+<h3>Worked example</h3>
+<p>How to read outputs from R and plot results.</p>
+<p></br></p>
+</div>
+</div>
+</div>
+<div id="whats-next" class="section level1 facta">
+<h1>What’s next?</h1>
+<ul>
+<li><strong>Linear models for categorical explanatory variables</strong>/<strong>ANOVA</strong> for analyses when your explanatory variable is not numeric.</li>
+<li><strong>Multiple regression</strong> for analyses with more than one numeric explanatory variable.</li>
+<li><strong>Generalised linear models</strong> for analyses when your response variable is not normally distributed.</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
