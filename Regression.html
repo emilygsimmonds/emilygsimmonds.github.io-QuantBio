@@ -528,6 +528,9 @@ div.tocify {
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">For numeric explanatory variables</li>
+    <li>
+      <a href="Regression.html">Simple linear regression</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">For mixed explanatory variables</li>
     <li class="divider"></li>
@@ -1095,18 +1098,15 @@ LowerCI = estimate - (1.96 SE) \\
 <p></br></p>
 <p>Once we have created predictions of <span class="math inline">\(Y\)</span> from the model object, we can then plot these using <code>geom_line()</code> as in the code below.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">DepthPredictions &lt;-<span class="st"> </span>DepthPredictions <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>(DepthPredictions) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">x=</span>DiveData<span class="op">$</span>BodySizeKG)</a></code></pre></div>
-<pre><code>## Warning: The `validate` argument of `as_tibble()` is deprecated as of tibble 2.0.0.
-## Please use the `.name_repair` argument instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">ggplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>DepthPredictions, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">ymin=</span>lwr, <span class="dt">ymax=</span>upr), <span class="dt">fill=</span><span class="st">&#39;grey50&#39;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>DiveData, <span class="kw">aes</span>(<span class="dt">x=</span>BodySizeKG, <span class="dt">y=</span>MaxDepth),<span class="dt">colour =</span> <span class="st">&#39;grey70&#39;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb49-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>DepthPredictions, <span class="kw">aes</span>(<span class="dt">y=</span>fit, <span class="dt">x=</span>x))<span class="op">+</span></a>
-<a class="sourceLine" id="cb49-5" data-line-number="5"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Maximum Dive Depth (m)&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb49-6" data-line-number="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Body Size (kg)&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb49-7" data-line-number="7"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">x=</span>DiveData<span class="op">$</span>BodySizeKG)</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb47-4" data-line-number="4"><span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data=</span>DepthPredictions, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">ymin=</span>lwr, <span class="dt">ymax=</span>upr), <span class="dt">fill=</span><span class="st">&#39;grey50&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>DiveData, <span class="kw">aes</span>(<span class="dt">x=</span>BodySizeKG, <span class="dt">y=</span>MaxDepth),<span class="dt">colour =</span> <span class="st">&#39;grey70&#39;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data=</span>DepthPredictions, <span class="kw">aes</span>(<span class="dt">y=</span>fit, <span class="dt">x=</span>x))<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-8" data-line-number="8"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Maximum Dive Depth (m)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-9" data-line-number="9"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Body Size (kg)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-10" data-line-number="10"><span class="st">  </span><span class="kw">theme_minimal</span>()</a></code></pre></div>
 <p><img src="Regression_files/figure-html/unnamed-chunk-31-1.png" width="672" /> <em>Figure X: Scatter plot of dive depths against body size. Line is the regression line from a linear model. Shaded area is 95% confidence interval</em></p>
 <p></br></p>
 <p>The plot shows that the uncertainty in the estimated relationship gets increasingly uncertain as you get to higher body sizes.</p>
@@ -1114,8 +1114,8 @@ LowerCI = estimate - (1.96 SE) \\
 <div id="predicting-dive-depths-for-a-body-size-of-75000kg" class="section level4">
 <h4>Predicting dive depths for a body size of 75000kg</h4>
 <p>A colleague as just found a new species of whale (fictional). The whale washed up on shore in Tromsø, it weighed 75000kg. Based on our linear regression analysis, how deep would we expect it to dive?</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">predict</span>(DiveModel, <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">BodySizeKG=</span><span class="dv">75000</span>), </a>
-<a class="sourceLine" id="cb50-2" data-line-number="2">                             <span class="dt">type=</span><span class="st">&quot;response&quot;</span>, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">predict</span>(DiveModel, <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">BodySizeKG=</span><span class="dv">75000</span>), </a>
+<a class="sourceLine" id="cb48-2" data-line-number="2">                             <span class="dt">type=</span><span class="st">&quot;response&quot;</span>, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</a></code></pre></div>
 <pre><code>##        fit       lwr      upr
 ## 1 352.1753 -1328.376 2032.727</code></pre>
 <p></br></p>

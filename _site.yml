@@ -69,6 +69,8 @@ navbar:
           href: Example_analysis.html
         - text: "-----"
         - text: "For numeric explanatory variables"
+        - text: "Simple linear regression"
+          href: Regression.html
         - text: "-----"
         - text: "For mixed explanatory variables"
         - text: "-----"
